@@ -15,6 +15,7 @@ interface IUserProfile {
   status: string;
   feedback: feedback;
 }
+
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
 
