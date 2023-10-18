@@ -1,0 +1,315 @@
+.chat-input {
+  width: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  padding-bottom: 20px;
+  input {
+    font-family: "Poppins";
+    width: 350px;
+    padding: 8px 10px;
+    border-radius: 1ex;
+    background-color: #eee;
+    font-size: 17px;
+    font-weight: 555;
+    border: 1px solid gold;
+    outline: none;
+    color: #222;
+    transition: 0.4s all ease;
+    margin-right: 5px;
+    &:hover {
+      box-shadow: 0px 0px 10px 5px rgba(128, 128, 128, 0.474);
+    }
+    &:focus {
+      box-shadow: 0px 0px 4px 4px rgba(244, 181, 6, 0.42);
+    }
+  }
+  form button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 25px;
+    color: #15baf6;
+    // color: #f66b15;
+
+    transition: 0.2s all ease;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+// CHAT BODY:
+
+.chat-list {
+  width: 57%;
+  padding: 10px;
+  margin: 0 auto;
+  margin-top: 30px;
+  overflow-x: hidden;
+  max-height: 74vh;
+  overflow-y: auto;
+  border-radius: 2ex;
+  scroll-behavior: smooth;
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: rgba(30, 169, 255, 0.715);
+    border-radius: 1ex;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0.5ex;
+    width: 10px;
+    background-color: #fff6f6;
+  }
+  .chat-message {
+    color: #fff;
+    font-weight: 555;
+    margin-bottom: 2px;
+    * {
+      border-radius: 1ex;
+      padding: 3.4px;
+    }
+    .myMessage {
+      transform: translateX(255%) scale(1);
+      opacity: 1;
+      background-color: #15baf6;
+      max-width: 250px;
+      word-wrap: break-word;
+      animation: enterAnewMessageMy 0.4s ease 0s 1;
+    }
+    .theirMessage {
+      transform: translateX(0.6%);
+      background-color: #f66b15;
+      max-width: 270px;
+      word-wrap: break-word;
+      animation: enterAnewMessageTheir 0.4s ease 0s 1;
+    }
+  }
+}
+
+@keyframes enterAnewMessageMy {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateX(205%);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8) translateX(255%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateX(255%);
+  }
+}
+
+@keyframes enterAnewMessageTheir {
+  0% {
+    opacity: 0;
+    transform: scale(0.6) translateX(0.6%);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8) translateX(0.6%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateX(0.6%);
+  }
+}
+
+.quitChat {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+  button {
+    background-color: #ff2200;
+    border-radius: 1ex;
+    padding: 4px 6px;
+    font-family: "Poppins";
+    font-weight: 555;
+    color: #eee;
+    transition: 0.3s all ease;
+    font-size: 13px;
+    &:hover {
+      background-color: #ff0000;
+      cursor: pointer;
+      box-shadow: 2px 1px 2px 1px #ff5900d6;
+    }
+  }
+}
+.quited-user {
+  text-align: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin: 0px auto;
+  background-color: #1564f6cc;
+  align-content: center;
+  z-index: 1;
+  p {
+    max-width: 600px;
+    font-weight: 655;
+    color: #ff2f00;
+    font-size: 25px;
+    text-shadow: 2px 2px 2px rgb(7, 83, 247);
+    button {
+      margin-left: 10px;
+      background-color: #ff2200;
+      border-radius: 1ex;
+      padding: 4px 6px;
+      font-family: "Poppins";
+      font-weight: 555;
+      color: #eee;
+      transition: 0.3s all ease;
+      font-size: 13px;
+      &:hover {
+        background-color: #ff0000;
+        cursor: pointer;
+        box-shadow: 2px 1px 2px 1px #ff5900d6;
+      }
+    }
+    span {
+      color: #ffffffe3;
+      font-weight: 700;
+      text-shadow: 2px 3px 2px #ff1e00ae;
+    }
+  }
+}
+.callEmojisList {
+  align-self: center;
+  button {
+    background-color: transparent;
+    border: none;
+    font-size: 21px;
+    font-weight: 555;
+    cursor: pointer;
+    img {
+      vertical-align: top;
+    }
+  }
+}
+.emojis-active {
+  opacity: 1;
+  pointer-events: all;
+  transition: 0.3s all ease;
+}
+.emojis-inactive {
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s all ease;
+}
+.emojis-container {
+  position: fixed;
+  bottom: 12%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  max-width: 320px;
+  height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(30, 143, 255, 0.696);
+  border-radius: 1ex;
+  padding-top: 10px;
+
+  &::-webkit-scrollbar {
+    width: 13px;
+    background-color: rgba(30, 169, 255, 0.715);
+    border-radius: 1ex;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0.5ex;
+    width: 10px;
+    background-color: #fff6f6;
+  }
+}
+
+.emoji {
+  font-size: 20px;
+  padding: 5px;
+  cursor: pointer;
+  transition: 0.2s all ease-in;
+}
+
+.emoji:hover {
+  background-color: #e79107;
+  border-radius: 5px;
+  transform: scale(1.2);
+}
+//FEEDBACK STYLE
+.feedback-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #c75300;
+  z-index: 2;
+  button {
+    transition: 0.2s all ease;
+    cursor: pointer;
+  }
+  h3 {
+    font-size: 28px;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  p {
+    font-size: 26px;
+    color: #fff;
+	font-weight: 600;
+	margin: 10px 0px;
+  }
+  .emoji-options {
+    width: 10%;
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 0px;
+
+    button {
+      font-size: 24px;
+      background-color: #154df6e0;
+      border-radius: 2ex;
+      padding: 5px;
+      &:hover {
+        background-color: #c8c7c7;
+        transform: scale(1.1);
+      }
+      &.isActive {
+        background-color: #de6e06;
+        transform: scale(1.2);
+      }
+    }
+  }
+  .submit-feedback,
+  button {
+    background-color: #ff2f00;
+    color: #f8f9ff;
+    padding: 6px;
+    border-radius: 1ex;
+    font-size: 20px;
+    font-weight: 600;
+    transition: 0.2s all ease;
+
+    &:hover {
+      background-color: #f50606;
+    }
+  }
+}
+//FEEDBACK STYLE

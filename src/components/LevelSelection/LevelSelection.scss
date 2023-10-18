@@ -1,0 +1,150 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,500&display=swap");
+a {
+  text-decoration: none;
+}
+.levelSelection {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+
+  .gridLevels {
+    // display: grid;
+    // grid-template-columns: repeat(4, 1fr);
+    margin-top: 50px;
+    gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    .beginner,
+    .elementary,
+    .intermediate,
+    .upperIntermediate {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 345px;
+      width: 300px;
+      border-radius: 1ex;
+      animation: enterGridLevels 0.5s ease 0s;
+      h2 {
+        font-size: 22px;
+      }
+      p {
+        max-width: 280px;
+        margin-top: 5px;
+        text-align: center;
+        height: 225px;
+        font-size: 13.5px;
+        font-weight: 555;
+        font-style: italic;
+        color: #2a2626;
+      }
+    }
+    .beginner {
+      background-color: #fdedec;
+      span {
+        font-family: "Josefin Sans", sans-serif;
+        margin-top: 5px;
+        padding: 10px;
+        background-color: #fec7d1;
+        border-radius: 4ex;
+        font-size: 18px;
+        font-weight: 700;
+        color: #fc2929;
+      }
+      h2 {
+        color: rgb(64, 252, 2);
+      }
+      a {
+        background-color: #ca72b4;
+        font-family: "Josefin Sans", sans-serif;
+        color: #fef6f4;
+        border-radius: 1ex;
+        padding: 3px 4px;
+      }
+    }
+    .elementary {
+      background-color: #fef3c7;
+      span {
+        font-family: "Josefin Sans", sans-serif;
+        margin-top: 5px;
+        padding: 10px;
+        background-color: #fedcc7;
+        border-radius: 4ex;
+        font-size: 18px;
+        font-weight: 700;
+        color: #37fc29;
+      }
+      h2 {
+        color: rgb(255, 49, 18);
+      }
+      a {
+        background-color: #d69158;
+        font-family: "Josefin Sans", sans-serif;
+        color: #fef6f4;
+        border-radius: 1ex;
+        padding: 3px 4px;
+      }
+    }
+    .intermediate {
+      background-color: #c7fdfe;
+      span {
+        font-family: "Josefin Sans", sans-serif;
+        margin-top: 5px;
+        padding: 10px;
+        background-color: #4df9cbd0;
+        border-radius: 4ex;
+        font-size: 18px;
+        font-weight: 700;
+        color: #eb2f09;
+      }
+      h2 {
+        color: rgb(255, 187, 0);
+      }
+      a {
+        background-color: #4d97b5;
+        font-family: "Josefin Sans", sans-serif;
+        color: #fef6f4;
+        border-radius: 1ex;
+        padding: 3px 4px;
+      }
+    }
+    .upperIntermediate {
+      background-color: #fec7d1;
+      span {
+        font-family: "Josefin Sans", sans-serif;
+        margin-top: 5px;
+        padding: 10px;
+        background-color: #fedcc7;
+        border-radius: 4ex;
+        font-size: 18px;
+        font-weight: 700;
+        color: #37fc29;
+      }
+      h2 {
+        color: rgb(244, 14, 248);
+      }
+      a {
+        background-color: #ad5460;
+        font-family: "Josefin Sans", sans-serif;
+        color: #fef6f4;
+        border-radius: 1ex;
+        padding: 3px 4px;
+      }
+    }
+  }
+}
+@keyframes enterGridLevels {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

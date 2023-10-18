@@ -1,0 +1,189 @@
+.GrammarChecker {
+  width: 100%;
+  padding: 20px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.5s all ease;
+}
+.GrammarChecker-container {
+  width: 555px;
+  height: auto;
+  color: #232;
+  border-radius: 1ex;
+  transition: 0.5s all ease;
+  padding: 5px;
+  transform: translateY(0px);
+  animation: gg 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95) 0s 1 forwards;
+}
+@keyframes gg {
+  0% {
+    transform: translateY(50px);
+  }
+  30% {
+    transform: translateY(40px);
+  }
+  40% {
+    transform: translateY(30px);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(5px);
+  }
+}
+.sentence {
+  font-weight: 555;
+  background-color: rgb(30, 162, 223);
+  color: #fff;
+  width: auto;
+  text-align: center;
+  border-radius: 1.1ex;
+  font-size: 18px;
+}
+.resultMessage {
+  font-weight: 555;
+  background-color: rgb(12, 113, 228);
+  color: #eee;
+  width: auto;
+  text-align: center;
+  font-size: 19px;
+  margin-bottom: 3px;
+}
+.edit-container {
+  .error_type {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 10px 0px;
+
+    ol {
+      display: inline-flex;
+      text-align: center;
+      color: #fefe;
+      font-weight: 455;
+      font-size: 17px;
+      width: auto;
+      background-color: rgb(226, 19, 19);
+      margin-bottom: 4px;
+      border-radius: 0.7ex;
+      padding: 2px;
+      align-items: center;
+      span {
+        display: block;
+        background-color: #20f240;
+        border-radius: 0.7ex;
+        padding: 2px;
+      }
+      strong {
+        background-color: rgb(248, 116, 8);
+        padding: 2px 4px;
+        border-radius: 2ex;
+        margin-right: 5px;
+        font-style: italic;
+      }
+    }
+  }
+}
+.correct-sentence {
+  text-align: center;
+
+  p {
+    font-weight: 555;
+    color: aliceblue;
+    border-radius: 0.7ex;
+    background-color: #08f92d;
+    font-size: 18px;
+    span {
+      color: rgb(223, 240, 255);
+      margin-right: 10px;
+    }
+  }
+}
+.copyTheCorrectAnswer {
+  background-color: #fff;
+  color: #08f92d;
+  font-size: 22px;
+  border: none;
+  padding-top: 4px;
+  padding: 4px 5px 0px 4px;
+  border-radius: 0.5ex;
+  vertical-align: top;
+  margin-left: 20px;
+  cursor: pointer;
+  font-weight: 655;
+  transition: 0.3s all ease;
+  &:hover {
+    background-color: #eee;
+    color: rgb(241, 143, 15);
+  }
+  span {
+    font-size: 14px;
+    position: absolute;
+    font-weight: 555;
+    bottom: 50px;
+    background-color: #08f92d;
+    color: #fff !important;
+    padding: 2px;
+    border-radius: 1ex;
+    opacity: 0;
+    animation: showCopiedTextAnimation 1s ease-in 0s 1;
+  }
+  @keyframes showCopiedTextAnimation {
+    0% {
+      opacity: 1;
+    }
+    20% {
+      bottom: 40px;
+    }
+    40% {
+      bottom: 30px;
+    }
+    50% {
+      bottom: 20px;
+    }
+    60% {
+      bottom: 10px;
+    }
+    80% {
+      bottom: 5px;
+    }
+    90% {
+      bottom: 0;
+    }
+    100% {
+      bottom: 0;
+      opacity: 0;
+    }
+  }
+}
+
+textarea {
+  border-radius: 1ex;
+  width: 450px;
+  height: 240px;
+  background-color: #fefe;
+  font-size: 16px;
+  color: #232;
+  font-family: "Poppins";
+  outline: 1px solid gold;
+  border: 1px solid gold;
+  padding: 5px;
+  resize: none;
+  &::placeholder {
+    text-align: center;
+  }
+}
+
+// grammer button style
+grammarly-editor-plugin {
+  --grammarly-default-font-family: Optima, sans-serif;
+  --grammarly-interactive-color: #e00697;
+  --grammarly-default-border-radius: 30px;
+  --grammarly-card-border-radius: 0px;
+  --grammarly-button-position-right: 50px;
+  --grammarly-button-position-bottom: 10px;
+}

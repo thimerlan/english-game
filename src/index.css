@@ -1,0 +1,35 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
+@import url("https://fonts.googleapis.com/css?family=Belanosima:regular,600,700");
+@import url("https://fonts.googleapis.com/css?family=Yusei+Magic:regular");
+/* npm install core-js@latest */
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  overflow-x: hidden;
+}
+ul li,
+ol {
+  list-style-type: none;
+}
+a {
+  color: inherit;
+}
+button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+body {
+  background-color: cornflowerblue;
+  font-family: "Poppins";
+  background-image: url("https://www.teahub.io/photos/full/362-3620272_dark-blue-texture-background-darkness.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}

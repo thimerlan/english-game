@@ -1,0 +1,28 @@
+.auth {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    display: inline-block;
+    background-color: #cc5f5f;
+    padding: 4px 7px;
+    border: 2px solid #0088ffe9;
+    color: #fff;
+    font-weight: 555;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    border-radius: 1ex;
+    transition: all 0.3s ease-in;
+    &:hover {
+      cursor: pointer;
+      transform: translate3d(3px, -3px, 3px);
+      box-shadow: 2px 2px 1px #cc5f5f;
+    }
+    margin-right: 10px;
+  }
+  img {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+  }
+}

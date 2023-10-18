@@ -1,0 +1,155 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@1,500&display=swap");
+a {
+  text-decoration: none;
+}
+
+.levelSelection {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+}
+.levelSelection .gridLevels {
+  margin-top: 50px;
+  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.levelSelection .gridLevels .beginner,
+.levelSelection .gridLevels .elementary,
+.levelSelection .gridLevels .intermediate,
+.levelSelection .gridLevels .upperIntermediate {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 345px;
+  width: 300px;
+  border-radius: 1ex;
+  animation: enterGridLevels 0.5s ease 0s;
+}
+.levelSelection .gridLevels .beginner h2,
+.levelSelection .gridLevels .elementary h2,
+.levelSelection .gridLevels .intermediate h2,
+.levelSelection .gridLevels .upperIntermediate h2 {
+  font-size: 22px;
+}
+.levelSelection .gridLevels .beginner p,
+.levelSelection .gridLevels .elementary p,
+.levelSelection .gridLevels .intermediate p,
+.levelSelection .gridLevels .upperIntermediate p {
+  max-width: 280px;
+  margin-top: 5px;
+  text-align: center;
+  height: 225px;
+  font-size: 13.5px;
+  font-weight: 555;
+  font-style: italic;
+  color: #2a2626;
+}
+.levelSelection .gridLevels .beginner {
+  background-color: #fdedec;
+}
+.levelSelection .gridLevels .beginner span {
+  font-family: "Josefin Sans", sans-serif;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #fec7d1;
+  border-radius: 4ex;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fc2929;
+}
+.levelSelection .gridLevels .beginner h2 {
+  color: rgb(64, 252, 2);
+}
+.levelSelection .gridLevels .beginner a {
+  background-color: #ca72b4;
+  font-family: "Josefin Sans", sans-serif;
+  color: #fef6f4;
+  border-radius: 1ex;
+  padding: 3px 4px;
+}
+.levelSelection .gridLevels .elementary {
+  background-color: #fef3c7;
+}
+.levelSelection .gridLevels .elementary span {
+  font-family: "Josefin Sans", sans-serif;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #fedcc7;
+  border-radius: 4ex;
+  font-size: 18px;
+  font-weight: 700;
+  color: #37fc29;
+}
+.levelSelection .gridLevels .elementary h2 {
+  color: rgb(255, 49, 18);
+}
+.levelSelection .gridLevels .elementary a {
+  background-color: #d69158;
+  font-family: "Josefin Sans", sans-serif;
+  color: #fef6f4;
+  border-radius: 1ex;
+  padding: 3px 4px;
+}
+.levelSelection .gridLevels .intermediate {
+  background-color: #c7fdfe;
+}
+.levelSelection .gridLevels .intermediate span {
+  font-family: "Josefin Sans", sans-serif;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: rgba(77, 249, 203, 0.8156862745);
+  border-radius: 4ex;
+  font-size: 18px;
+  font-weight: 700;
+  color: #eb2f09;
+}
+.levelSelection .gridLevels .intermediate h2 {
+  color: rgb(255, 187, 0);
+}
+.levelSelection .gridLevels .intermediate a {
+  background-color: #4d97b5;
+  font-family: "Josefin Sans", sans-serif;
+  color: #fef6f4;
+  border-radius: 1ex;
+  padding: 3px 4px;
+}
+.levelSelection .gridLevels .upperIntermediate {
+  background-color: #fec7d1;
+}
+.levelSelection .gridLevels .upperIntermediate span {
+  font-family: "Josefin Sans", sans-serif;
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #fedcc7;
+  border-radius: 4ex;
+  font-size: 18px;
+  font-weight: 700;
+  color: #37fc29;
+}
+.levelSelection .gridLevels .upperIntermediate h2 {
+  color: rgb(244, 14, 248);
+}
+.levelSelection .gridLevels .upperIntermediate a {
+  background-color: #ad5460;
+  font-family: "Josefin Sans", sans-serif;
+  color: #fef6f4;
+  border-radius: 1ex;
+  padding: 3px 4px;
+}
+
+@keyframes enterGridLevels {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
