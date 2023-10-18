@@ -387,3 +387,26 @@
     transform: scale(1.07);
   }
 }
+.beRedyToTalk {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  button {
+    background-color: #0044fff0;
+    font-family: "Poppins";
+    border-radius: 1ex;
+    padding: 4px 6px;
+    font-weight: 555;
+    color: #eee;
+    transition: 0.3s all ease;
+    margin-right: 7px;
+    text-transform: capitalize;
+    font-size: 15px;
+    cursor: pointer;
+    &:hover {
+      transform: scale(1.07);
+      background-color: #008cfff0;
+    }
+  }
+}

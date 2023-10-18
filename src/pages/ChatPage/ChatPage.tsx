@@ -37,8 +37,8 @@ const ChatPage = () => {
     IPendingCallRequestInfo[]
   >([]);
   const [filterUsersBy, setFilterUsersBy] = useState("all");
+  const [readyToChat, setReadyToChat] = useState(false);
   const [userProfilesLoading, setUserProfilesLoading] = useState(true);
-
   useEffect(() => {
     const userProfilesRef = ref(dbChat, "userProfiles");
     const userUID = auth?.currentUser?.uid;
@@ -107,7 +107,7 @@ const ChatPage = () => {
       handleStatusEmptyForRecipient();
 
       setChatRoomId(newChatRoomId);
-
+      setReadyToChat(false);
       setPendingCallRequests((pendingCalls) =>
         pendingCalls.filter(({ key }) => key !== callRequestKey)
       );
@@ -291,6 +291,12 @@ const ChatPage = () => {
     }
     return false;
   });
+  useEffect(() => {
+    if (readyToChat && pendingCallRequests.length > 0) {
+      const firstPendingRequest = pendingCallRequests[0];
+      acceptCall(firstPendingRequest.key);
+    }
+  }, [readyToChat, pendingCallRequests]);
 
   const isChatRoomEmpty = () => chatRoomId.length === 0;
   if (auth.currentUser) {
@@ -322,33 +328,38 @@ const ChatPage = () => {
           </div>
         )}
         {isChatRoomEmpty() && (
-          <div className="filterUsersBy">
-            <p>Filter users by: </p>
-            <button
-              className={filterUsersBy === "all" ? "all" : ""}
-              onClick={() => setFilterUsersBy("all")}
-            >
-              All
-            </button>
-            <button
-              className={filterUsersBy === "online" ? "online" : ""}
-              onClick={() => setFilterUsersBy("online")}
-            >
-              Online
-            </button>
-            <button
-              className={filterUsersBy === "chatting" ? "chatting" : ""}
-              onClick={() => setFilterUsersBy("chatting")}
-            >
-              Chatting
-            </button>
-            <button
-              className={filterUsersBy === "offline" ? "offline" : ""}
-              onClick={() => setFilterUsersBy("offline")}
-            >
-              Offline
-            </button>
-          </div>
+          <>
+            <div className="beRedyToTalk">
+              <button onClick={() => setReadyToChat(true)}>SMTH</button>
+            </div>
+            <div className="filterUsersBy">
+              <p>Filter users by: </p>
+              <button
+                className={filterUsersBy === "all" ? "all" : ""}
+                onClick={() => setFilterUsersBy("all")}
+              >
+                All
+              </button>
+              <button
+                className={filterUsersBy === "online" ? "online" : ""}
+                onClick={() => setFilterUsersBy("online")}
+              >
+                Online
+              </button>
+              <button
+                className={filterUsersBy === "chatting" ? "chatting" : ""}
+                onClick={() => setFilterUsersBy("chatting")}
+              >
+                Chatting
+              </button>
+              <button
+                className={filterUsersBy === "offline" ? "offline" : ""}
+                onClick={() => setFilterUsersBy("offline")}
+              >
+                Offline
+              </button>
+            </div>
+          </>
         )}
         <h3 className="userInfo">
           {senderUserInfo && chatRoomId && (
