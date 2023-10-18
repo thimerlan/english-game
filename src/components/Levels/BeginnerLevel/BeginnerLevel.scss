@@ -1,0 +1,138 @@
+.beginnerLevel {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 50px;
+  height: 120vh;
+}
+.beginnerLevel-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 5px;
+  text-align: center;
+  background-color: rgba(61, 67, 100, 0.689);
+  border-radius: 1ex;
+  border: 2.2px dashed #fca829;
+  h2 {
+    font-size: 32px;
+    color: rgb(64, 252, 2);
+  }
+  p {
+    color: #fca829;
+    font-weight: 555;
+    font-size: 20px;
+  }
+  .bottom-arrow button {
+    color: #fc5329;
+    font-size: 33.3px;
+    font-weight: 888;
+    position: relative;
+    animation: animationOfBottomArrow 1s ease infinite;
+    cursor: pointer;
+    padding: 5px;
+    background-color: transparent;
+    outline: none;
+    border: none;
+  }
+}
+@keyframes animationOfBottomArrow {
+  0% {
+    top: 1px;
+  }
+  20% {
+    top: 3px;
+  }
+  30% {
+    top: 4px;
+  }
+  40% {
+    top: 5px;
+  }
+  50% {
+    top: 7px;
+  }
+  60% {
+    top: 6px;
+  }
+  70% {
+    top: 5px;
+  }
+  80% {
+    top: 4px;
+  }
+  90% {
+    top: 3px;
+  }
+  100% {
+    top: 2px;
+  }
+}
+//
+.testCards {
+  margin-top: 65px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 1350px;
+  gap: 20px;
+  padding-bottom: 30px;
+
+  .testCard {
+    background-color: #f3d8c7;
+    text-align: center;
+    width: 246px;
+    height: 301px;
+    border-radius: 0.8ex;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    transition: 0.3s all ease;
+    animation: enterTestCards 0.4s ease;
+    &:hover {
+      transform: translate3d(3px, -3px, 7px);
+      box-shadow: inset 0px 0px 5px 5px #f25932;
+    }
+    h3 {
+      font-size: 21px;
+      color: #fc5329;
+    }
+    p {
+      font-size: 17px;
+      font-weight: 555;
+      color: #222;
+    }
+    .testCardButtons {
+      button {
+        background-color: #fca829;
+        border-radius: 1ex;
+        border: none;
+        padding: 6px 9px;
+        font-family: "Poppins";
+        font-weight: 555;
+        font-size: 1.6ex;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s all ease;
+        &:hover {
+          box-shadow: inset 0px 0px 5px 5px #fc5329;
+        }
+      }
+    }
+  }
+}
+@keyframes enterTestCards {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
