@@ -296,12 +296,6 @@ const ChatPage = () => {
   if (auth.currentUser) {
     return (
       <div className="chat-page">
-        <button
-          className="navigateToDashboard"
-          onClick={() => navigate("/dashboard")}
-        >
-          My profile
-        </button>
         {isChatRoomEmpty() && (
           <div className="navigationButtons">
             <button className="navigateToHome" onClick={() => navigate("/")}>
