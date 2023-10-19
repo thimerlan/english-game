@@ -19,7 +19,7 @@ import { RiRadioButtonLine } from "react-icons/ri";
 import useChat from "../../hooks/useChat/useChat";
 import SignIn from "../../Auth/SignIn/SignIn";
 import "./ChatPage.scss";
-import { PulseLoader } from "react-spinners";
+import { PulseLoader, SyncLoader } from "react-spinners";
 interface IPendingCallRequestInfo {
   senderName: string;
   status: string;
@@ -104,10 +104,13 @@ const ChatPage = () => {
       await update(callRequestRef, { status: "accepted" });
 
       const newChatRoomId = (await get(callRequestRef)).val().chatRoomId;
+
+      setReadyToChat(false);
+
       handleStatusEmptyForRecipient();
 
       setChatRoomId(newChatRoomId);
-      setReadyToChat(false);
+
       setPendingCallRequests((pendingCalls) =>
         pendingCalls.filter(({ key }) => key !== callRequestKey)
       );
@@ -115,6 +118,7 @@ const ChatPage = () => {
       const acceptedCall = pendingCallRequests.find(
         (pendingCall) => pendingCall.key === callRequestKey
       );
+
       if (acceptedCall) {
         setSenderUserInfo(acceptedCall.senderName);
       }
@@ -133,9 +137,11 @@ const ChatPage = () => {
     callRequestKey: string
   ): Promise<void> => {
     const requestToDeleteRef = ref(dbChat, `callRequests/${callRequestKey}`);
+
     setPendingCallRequests((pendingCalls) =>
       pendingCalls.filter(({ key }) => key !== callRequestKey)
     );
+
     try {
       await remove(requestToDeleteRef);
 
@@ -186,7 +192,6 @@ const ChatPage = () => {
             callRequest.status === "rejected"
           ) {
             setRecipientUserInfo("");
-            deleteCallRequestData(callRequestKey);
           }
           const userIsSender = Object.values(callRequests).find(
             (callRequest: any) => callRequest.sender === userUID
@@ -286,19 +291,46 @@ const ChatPage = () => {
       return user.status === "online";
     } else if (filterUsersBy === "chatting") {
       return user.status === "chatting";
+    } else if (filterUsersBy === "ready") {
+      return user.status === "ready";
     } else if (filterUsersBy === "offline") {
       return user.status === "offline";
     }
     return false;
   });
+
   useEffect(() => {
+    const userProfilesRef = ref(dbChat, "userProfiles");
+    const userUID = auth.currentUser?.uid;
+
     if (readyToChat && pendingCallRequests.length > 0) {
       const firstPendingRequest = pendingCallRequests[0];
       acceptCall(firstPendingRequest.key);
     }
+
+    if (userUID) {
+      if (readyToChat) {
+        update(child(userProfilesRef, userUID), {
+          status: "ready",
+        });
+      }
+
+      if (!chatRoomId.length && !readyToChat) {
+        update(child(userProfilesRef, userUID), {
+          status: "online",
+        });
+      }
+    }
+
+    if (chatRoomId.length) {
+      pendingCallRequests.forEach(async (pendingCall) => {
+        await deleteCallRequestData(pendingCall.key);
+      });
+    }
   }, [readyToChat, pendingCallRequests]);
 
   const isChatRoomEmpty = () => chatRoomId.length === 0;
+
   if (auth.currentUser) {
     return (
       <div className="chat-page">
@@ -329,8 +361,42 @@ const ChatPage = () => {
         )}
         {isChatRoomEmpty() && (
           <>
-            <div className="beRedyToTalk">
-              <button onClick={() => setReadyToChat(true)}>SMTH</button>
+            <div className="beReadyToChat">
+              <button
+                className="activate-readyToChat-btn"
+                onClick={() => setReadyToChat(true)}
+              >
+                Find a partner
+              </button>
+
+              <div
+                className={
+                  readyToChat
+                    ? "beReadytoChat-container-active"
+                    : "beReadytoChat-container-inactive"
+                }
+              >
+                <div className="beReadyToChat-content">
+                  <p className="info-ReadyToChatFeature">
+                    Now you are available for chat. Others can send you chat
+                    requests, and the first request you get will start the
+                    conversation. It's a quick and easy way to connect with
+                    fellow users.
+                  </p>
+                  <div className="searching-ui">
+                    <div className="searching-ui-loading">
+                      <SyncLoader color="#00b3ff" size={28} />
+                    </div>
+                    <p>We are searching a parkner for you...</p>
+                  </div>
+                  <button
+                    className="inactivate-readyToChat-btn"
+                    onClick={() => setReadyToChat(false)}
+                  >
+                    Cancel searching
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="filterUsersBy">
               <p>Filter users by: </p>
@@ -345,6 +411,12 @@ const ChatPage = () => {
                 onClick={() => setFilterUsersBy("online")}
               >
                 Online
+              </button>
+              <button
+                className={filterUsersBy === "ready" ? "ready" : ""}
+                onClick={() => setFilterUsersBy("ready")}
+              >
+                Ready
               </button>
               <button
                 className={filterUsersBy === "chatting" ? "chatting" : ""}
@@ -392,27 +464,39 @@ const ChatPage = () => {
                       <b>👎{user.feedback?.dislikes}</b>
 
                       <span>
-                        {user.status === "online" ? (
-                          <RiRadioButtonLine color="#11ff00" />
-                        ) : (
-                          <RiRadioButtonLine color="#212" />
-                        )}
+                        <RiRadioButtonLine
+                          color={
+                            user.status === "online"
+                              ? "#11ff00"
+                              : user.status === "ready"
+                              ? "#11ff00"
+                              : "#14144d"
+                          }
+                        />
                       </span>
+
                       <button
                         title={
                           user.status === "online"
                             ? "This user is Online"
                             : user.status === "chatting"
                             ? "This user is Chatting already"
+                            : user.status === "ready"
+                            ? "This user is ready"
                             : "This user is Offline"
                         }
                         onClick={() => initiateCall(user.uid, user.displayName)}
-                        disabled={user.status !== "online"}
+                        disabled={
+                          user.status === "offline" ||
+                          user.status === "chatting"
+                        }
                       >
                         {user.status === "online"
                           ? "Call"
                           : user.status === "chatting"
                           ? "Chatting"
+                          : user.status === "ready"
+                          ? "Ready"
                           : "Offline"}
                       </button>
                     </li>
@@ -497,64 +581,3 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
-
-// {
-//NEW RULES
-// {
-//   "rules": {
-//     ".read": "auth != null",
-//     ".write": "auth != null",
-//     "chatRooms": {
-//       "$chatRoomId": {
-//         "messages": {
-//           ".read": "auth != null && data.child('participants').child(auth.uid).exists()",
-//           ".write": "auth != null && data.child('participants').child(auth.uid).exists()"
-//         }
-//       }
-//     }
-//   }
-// }
-// {
-// OLD RULES
-//   "rules": {
-//     ".read": "auth != null",
-//     ".write": "auth != null",
-//     "chats": {
-//       "$chatRoomId": {
-//         "messages": {
-//           ".read": "auth != null && data.child('participants').child(auth.uid).exists()",
-//           ".write": "auth != null"
-//         }
-//       }
-//     }
-//   }
-// }
-
-// {
-//   "rules": {
-//     ".read": "auth != null",
-//     ".write": "auth != null",
-//     "chatRooms": {
-//       "$chatRoomId": {
-//         ".read": "auth != null && (
-//                     data.child('participants').child(auth.uid).exists() ||
-//                     newData.child('participants').child(auth.uid).exists()
-//                   )",
-//         ".write": "auth != null && (
-//                     data.child('participants').child(auth.uid).exists() ||
-//                     newData.child('participants').child(auth.uid).exists()
-//                   )",
-//         "messages": {
-//           ".read": "auth != null && (
-//                       data.parent().child('participants').child(auth.uid).exists() ||
-//                       newData.parent().child('participants').child(auth.uid).exists()
-//                     )",
-//           ".write": "auth != null && (
-//                       data.parent().child('participants').child(auth.uid).exists() ||
-//                       newData.parent().child('participants').child(auth.uid).exists()
-//                     )"
-//         }
-//       }
-//     }
-//   }
-// }
