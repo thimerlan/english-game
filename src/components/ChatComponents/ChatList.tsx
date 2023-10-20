@@ -1,7 +1,8 @@
-import "./Chat.scss";
+import { useEffect, useRef, useState } from "react";
 import { auth, dbChat } from "../../firebaseConfig";
 import { ref, onChildAdded } from "firebase/database";
-import { useEffect, useRef, useState } from "react";
+
+import "./Chat.scss";
 
 interface ChatListProps {
   chatRoomId: string;

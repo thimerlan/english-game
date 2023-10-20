@@ -15,18 +15,16 @@ import { useEffect, useState } from "react";
 import { auth, dbChat } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { RiRadioButtonLine } from "react-icons/ri";
+import { PulseLoader, SyncLoader } from "react-spinners";
 
 import useChat from "../../hooks/useChat/useChat";
 import SignIn from "../../Auth/SignIn/SignIn";
+
 import "./ChatPage.scss";
-import { PulseLoader, SyncLoader } from "react-spinners";
-interface IPendingCallRequestInfo {
-  senderName: string;
-  status: string;
-  key: string;
-}
+
 const ChatPage = () => {
   const { userProfiles, setUserProfiles } = useChat();
+
   const navigate = useNavigate();
 
   const [chatRoomId, setChatRoomId] = useState("");
@@ -77,15 +75,17 @@ const ChatPage = () => {
   ): void => {
     const callRequestRef = ref(dbChat, "callRequests");
     const senderUID = auth.currentUser?.uid;
-    const newChatRoomId = generateChatRoomId(senderUID as string, recipientUID);
-    const newCallRequest = {
-      senderName: auth.currentUser?.displayName,
-      sender: senderUID,
-      recipient: recipientUID,
+    const newChatRoomId = generateChatRoomId(senderUID || "", recipientUID);
+    const newCallRequest: ICallRequest = {
+      senderName: auth.currentUser?.displayName || "",
+      sender: senderUID || "",
+      recipient: recipientUID || "",
       status: "pending",
       chatRoomId: newChatRoomId,
     };
+
     push(callRequestRef, newCallRequest);
+
     setRecipientUserInfo(recipientUserName);
 
     setChatRoomIdForSender();
