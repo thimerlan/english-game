@@ -13,16 +13,21 @@ interface IUserProfiles {
   status: string;
   feedback: feedback;
 }
-interface IQuittedUser {
+interface IChattingUserInfo {
   uid: string;
   username: string;
 }
 interface ICallRequest {
-  chatRoomId: string;
-  recipient: string;
   sender: string;
   senderName: string;
+  recipient: string;
   status: string;
+  chatRoomId: string;
+}
+interface IPendingCallRequestInfo {
+  senderName: string;
+  status: string;
+  key: string;
 }
 interface Emoji {
   slug: string;

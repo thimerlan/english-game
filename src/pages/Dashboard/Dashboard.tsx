@@ -18,7 +18,7 @@ interface IUserProfile {
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
 
-  const [loading, setLoading] = useState(true);
+  const [userProfileLoading, setUserProfileLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -34,10 +34,10 @@ const Dashboard = () => {
         } catch (error) {
           console.error("Error retrieving user profile:", error);
         } finally {
-          setLoading(false);
+          setUserProfileLoading(false);
         }
       } else {
-        setLoading(false);
+        setUserProfileLoading(false);
       }
     });
 
@@ -51,14 +51,14 @@ const Dashboard = () => {
       <NavBar goToBack={"Go to back"} />
       <div className="dashboard">
         <div className="dashboardContainer">
-          {!auth.currentUser && !loading && (
+          {!auth.currentUser && !userProfileLoading && (
             <h3 className="alert-signIn">
               Welcome ! To access your profile, please sign in
             </h3>
           )}
 
           <div className="user-profile">
-            {!loading ? (
+            {!userProfileLoading ? (
               userProfile ? (
                 <div className="userProfile-container">
                   <h1>Welcome, {userProfile.displayName}!</h1>

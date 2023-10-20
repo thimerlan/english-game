@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "./Chat.scss";
+import emojiIcon from "../../assets/emojiI.png";
 import { BiSolidSend } from "react-icons/bi";
 import { auth, dbChat } from "../../firebaseConfig";
 import {
@@ -14,7 +14,7 @@ import {
 } from "firebase/database";
 import { PulseLoader } from "react-spinners";
 import useEmojiAPI from "../../hooks/useEmojiApi/useEmojiApi";
-import emojiIcon from "../../assets/emojiI.png";
+import "./Chat.scss";
 interface ChatInputProps {
   chatRoomId: string;
   setChatRoomId: (chatRoomId: string) => void;
@@ -34,9 +34,9 @@ const ChatInput = ({
 }: ChatInputProps) => {
   const [message, setMessage] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
-  const [quittedUser, setQuittedUser] = useState<IQuittedUser>();
   const [feedbackType, setFeedbackType] = useState("");
   const [showFeedbackComponent, setShowFeedbackComponent] = useState(false);
+  const [chattingUserInfo, setChattingUserInfo] = useState<IChattingUserInfo>();
   const { emojis, loadingEmojis } = useEmojiAPI();
   const inputRef = useRef<HTMLInputElement>(null);
   const userUID = auth.currentUser?.uid;
@@ -100,7 +100,7 @@ const ChatInput = ({
           callRequest.recipient === userUID ||
           (callRequest.sender === userUID &&
             callRequest.status === "rejected" &&
-            quittedUser)
+            chattingUserInfo)
         ) {
           const requestToDeleteRef = ref(
             dbChat,
@@ -125,7 +125,7 @@ const ChatInput = ({
             callRequest.status === "rejected") ||
           (callRequest.sender === userUID && callRequest.status === "rejected")
         ) {
-          setQuittedUser({
+          setChattingUserInfo({
             uid: `${
               (callRequest.recipient !== userUID && callRequest.recipient) ||
               (callRequest.sender !== userUID && callRequest.sender)
@@ -151,7 +151,7 @@ const ChatInput = ({
     inputRef.current?.focus();
   };
   const handleGiveFeedback = async (): Promise<void> => {
-    const userProfileRef = ref(dbChat, `userProfiles/${quittedUser?.uid}`);
+    const userProfileRef = ref(dbChat, `userProfiles/${chattingUserInfo?.uid}`);
 
     try {
       const userProfileSnapshot = await get(userProfileRef);
@@ -210,10 +210,10 @@ const ChatInput = ({
           <button onClick={() => setChatRoomId("")}>Leave</button>
         </div>
       )}
-      {quittedUser && (
+      {chattingUserInfo && (
         <div className="quited-user">
           <p>
-            <span>{quittedUser.username} </span>
+            <span>{chattingUserInfo.username} </span>
             has left this chat. You can also leave this chat by clicking the
             button below:
             <button
