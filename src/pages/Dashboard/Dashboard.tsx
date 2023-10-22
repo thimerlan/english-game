@@ -62,6 +62,9 @@ const Dashboard = () => {
               userProfile ? (
                 <div className="userProfile-container">
                   <h1>Welcome, {userProfile.displayName}!</h1>
+                  <div className="editProfile">
+                    <button className="edit-profile">✏️</button>
+                  </div>
                   <div className="feedbacks-container">
                     <h3>Your Feedbacks:</h3>
                     <p>
