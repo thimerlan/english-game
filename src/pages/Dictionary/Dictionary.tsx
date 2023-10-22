@@ -58,6 +58,7 @@ const Dictionary = () => {
       }
     }
   };
+
   const playAudio = (audioSrc: string) => {
     const audio = new Audio(audioSrc);
     audio.play();

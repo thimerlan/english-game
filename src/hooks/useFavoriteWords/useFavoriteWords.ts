@@ -30,6 +30,7 @@ const useFavoriteWords = () => {
         unsubscribe();
       };
     } else {
+      setLoadingFavoriteWords(false);
     }
   }, [user]);
 
