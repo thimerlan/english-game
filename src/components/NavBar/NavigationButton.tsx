@@ -11,7 +11,7 @@ const NavigationButton = ({ goToBack }: INavigationButton) => {
       {goToBack ? (
         <button onClick={() => navigate(-1)}>{goToBack}</button>
       ) : (
-        <Link to={"/dashboard"}>Go to dashboard </Link>
+        <Link to={"/dashboard"}>dashboard</Link>
       )}
     </div>
   );
