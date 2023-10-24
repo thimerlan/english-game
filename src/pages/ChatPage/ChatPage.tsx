@@ -69,6 +69,7 @@ const ChatPage = () => {
         });
     };
   }, [chatRoomId, auth.currentUser?.uid]);
+
   const initiateCall = (
     recipientUID: string,
     recipientUserName: string
@@ -76,8 +77,11 @@ const ChatPage = () => {
     const callRequestRef = ref(dbChat, "callRequests");
     const senderUID = auth.currentUser?.uid;
     const newChatRoomId = generateChatRoomId(senderUID || "", recipientUID);
+    const senderUserName = Object.values(userProfiles).find(
+      (user) => user.uid === auth.currentUser?.uid
+    );
     const newCallRequest: ICallRequest = {
-      senderName: auth.currentUser?.displayName || "",
+      senderName: senderUserName?.displayName || "",
       sender: senderUID || "",
       recipient: recipientUID || "",
       status: "pending",
