@@ -77,11 +77,11 @@ const ChatPage = () => {
     const callRequestRef = ref(dbChat, "callRequests");
     const senderUID = auth.currentUser?.uid;
     const newChatRoomId = generateChatRoomId(senderUID || "", recipientUID);
-    const senderUserName = Object.values(userProfiles).find(
+    const currentUserProfile = Object.values(userProfiles).find(
       (user) => user.uid === auth.currentUser?.uid
     );
     const newCallRequest: ICallRequest = {
-      senderName: senderUserName?.displayName || "",
+      senderName: currentUserProfile?.displayName || "",
       sender: senderUID || "",
       recipient: recipientUID || "",
       status: "pending",
