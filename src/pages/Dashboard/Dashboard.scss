@@ -66,4 +66,128 @@
 .user-profileLoading {
   text-align: center;
 }
+
+.editProfile {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  .editProfile-btn {
+    font-family: "Poppins";
+    font-size: 21px;
+    font-weight: 600;
+    color: #fff8fb;
+    background-color: #ff5500;
+    padding: 4px 7px;
+    border-radius: 1ex;
+    cursor: pointer;
+    letter-spacing: 0.7px;
+    transition: all 0.3s ease;
+    &:hover {
+      box-shadow: 0px 0px 10px #ff8800;
+      letter-spacing: 0.2px;
+    }
+  }
+  .editProfile-container-active {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #54371ff4;
+    opacity: 1;
+    pointer-events: all;
+    transition: 0.4s all ease-in;
+  }
+  .editProfile-container-inactive {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #ea5d1ce5;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.4s all ease;
+  }
+  .editProfile-content {
+    width: 350px;
+    height: 150px;
+    background-color: #ff8800;
+    border-radius: 1ex;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+    .error-message {
+      font-size: 21px;
+      color: #ff1100;
+    }
+    .updatingProfile-message {
+      font-size: 22px;
+      color: #11ff00;
+      font-weight: 700;
+      text-shadow: 2px 2px grey;
+    }
+    input {
+      font-family: "Poppins";
+      width: 250px;
+      padding: 5.5px 6px;
+      border-radius: 1ex;
+      border: none;
+      outline: #ff5500;
+      font-weight: 600;
+      letter-spacing: 0.7px;
+      color: rgb(255, 81, 0);
+      transition: 0.2s all ease;
+      &::placeholder {
+        color: #ff5500;
+        font-weight: 500;
+      }
+      &:hover {
+        box-shadow: 0px 0px 10px rgb(75, 103, 156);
+      }
+      &:focus {
+        box-shadow: 0px 0px 10px rgb(24, 94, 222);
+      }
+    }
+    .update-userProfile {
+      font-family: "Poppins";
+      background-color: #fff;
+      color: #ff5500;
+      padding: 6px 8px;
+      border-radius: 1ex;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-in;
+      &:hover {
+        box-shadow: 0px 0px 10px #ff1100;
+        transform: scale(1.1);
+      }
+    }
+    .close-editProfile-modal {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 4.5px;
+      font-size: 20px;
+      font-family: "Poppins";
+      background-color: #fff;
+      color: #ff5500;
+      padding: 0px 4px;
+      border-radius: 1ex;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-in;
+    }
+  }
+}
 // user profile styles
