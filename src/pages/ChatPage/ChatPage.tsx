@@ -210,6 +210,7 @@ const ChatPage = () => {
       console.error("Error setting chat room ID for recipient:", error);
     }
   };
+
   useEffect(() => {
     const callRequestRef = ref(dbChat, "callRequests");
     const userUID = auth.currentUser?.uid;
@@ -331,7 +332,7 @@ const ChatPage = () => {
         await deleteCallRequestData(pendingCall.key);
       });
     }
-  }, [readyToChat, pendingCallRequests]);
+  }, [readyToChat, pendingCallRequests, chatRoomId]);
 
   const isChatRoomEmpty = () => chatRoomId.length === 0;
 
@@ -514,50 +515,72 @@ const ChatPage = () => {
             )}
           </ul>
         )}
-        {recipientUserInfo.length !== 0 && !chatRoomId && (
-          <div className="recipientUserInfo-active">
-            <div className="recipientUser-content">
-              <h4>{recipientUserInfo}</h4>
-              <button
-                className="cancel-button"
-                onClick={handleCancelCallForRecipient}
-              >
-                Cancel
-              </button>
+        {!chatRoomId && (
+          <div
+            className={
+              recipientUserInfo.length > 0 || senderUserInfo.length > 0
+                ? "call-notices-active"
+                : ""
+            }
+          >
+            <div
+              className={
+                recipientUserInfo.length > 0
+                  ? "recipientUserInfo-active"
+                  : "recipientUserInfo-inactive"
+              }
+            >
+              <div className="recipientUser-content">
+                <h4>{recipientUserInfo}</h4>
+                <button
+                  className="cancel-button"
+                  onClick={handleCancelCallForRecipient}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+            <div
+              className={
+                pendingCallRequests.length > 0 && recipientUserInfo.length === 0
+                  ? "senderUserContainer-active"
+                  : "senderUserContainer-inactive"
+              }
+            >
+              {pendingCallRequests.length !== 0 &&
+                pendingCallRequests.map((user) => (
+                  <div key={user.key} className="senderUserNotice-active">
+                    <div className="senderUserNotice-content">
+                      {recipientUserInfo.length > 0 && (
+                        <div className="info-message">
+                          You are currently calling to
+                          <span> {recipientUserInfo}</span>. Please cancel your
+                          current call before accepting a new one.
+                        </div>
+                      )}
+                      <h4>{user.senderName}</h4>
+                      <div className="senderUserNotice-content-buttons">
+                        <button
+                          className="accept-button"
+                          disabled={recipientUserInfo.length > 0}
+                          onClick={() => acceptCall(user.key)}
+                        >
+                          Accept
+                        </button>
+                        <button
+                          className="cancel-button"
+                          onClick={() => rejectCall(user.key)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         )}
-        <div
-          className={
-            pendingCallRequests.length > 0 && !chatRoomId
-              ? "senderUserContainer-active"
-              : "senderUserContainer-inactive"
-          }
-        >
-          {pendingCallRequests.length !== 0 &&
-            !chatRoomId &&
-            pendingCallRequests.map((user) => (
-              <div key={user.key} className="senderUserNotice-active">
-                <div className="senderUserNotice-content">
-                  <h4>{user.senderName}</h4>
-                  <div className="senderUserNotice-content-buttons">
-                    <button
-                      className="accept-button"
-                      onClick={() => acceptCall(user.key)}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="cancel-button"
-                      onClick={() => rejectCall(user.key)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </div>
+
         {chatRoomId.length > 0 && (
           <>
             <ChatList chatRoomId={chatRoomId} />
