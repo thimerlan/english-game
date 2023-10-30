@@ -9,7 +9,7 @@ import {
   remove,
   update,
 } from "firebase/database";
-import ChatInput from "../../components/ChatComponents/ChatInput";
+import ChatInterface from "../../components/ChatComponents/ChatInterface";
 import ChatList from "../../components/ChatComponents/ChatList";
 import { useEffect, useState } from "react";
 import { auth, dbChat } from "../../firebaseConfig";
@@ -584,7 +584,7 @@ const ChatPage = () => {
         {chatRoomId.length > 0 && (
           <>
             <ChatList chatRoomId={chatRoomId} />
-            <ChatInput
+            <ChatInterface
               chatRoomId={chatRoomId}
               setChatRoomId={setChatRoomId}
               senderUserInfo={senderUserInfo}

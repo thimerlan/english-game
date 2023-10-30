@@ -1,4 +1,4 @@
-.chat-input {
+.chat-interface {
   width: 100%;
   position: fixed;
   display: flex;
@@ -273,8 +273,8 @@
   p {
     font-size: 26px;
     color: #fff;
-	font-weight: 600;
-	margin: 10px 0px;
+    font-weight: 600;
+    margin: 10px 0px;
   }
   .emoji-options {
     width: 10%;

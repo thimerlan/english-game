@@ -15,7 +15,7 @@ import {
 import { PulseLoader } from "react-spinners";
 import useEmojiAPI from "../../hooks/useEmojiApi/useEmojiApi";
 import "./Chat.scss";
-interface ChatInputProps {
+interface ChatInterfaceProps {
   chatRoomId: string;
   setChatRoomId: (chatRoomId: string) => void;
   senderUserInfo: string;
@@ -24,14 +24,14 @@ interface ChatInputProps {
   setRecipientUserInfo: (recipientUserInfo: string) => void;
 }
 
-const ChatInput = ({
+const ChatInterface = ({
   chatRoomId,
   setChatRoomId,
   senderUserInfo,
   recipientUserInfo,
   setSenderUserInfo,
   setRecipientUserInfo,
-}: ChatInputProps) => {
+}: ChatInterfaceProps) => {
   const [message, setMessage] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const [feedbackType, setFeedbackType] = useState("");
@@ -185,7 +185,7 @@ const ChatInput = ({
   };
 
   return (
-    <div className="chat-input">
+    <div className="chat-interface">
       {showFeedbackComponent && (
         <div className="feedback-container">
           <h3>Select Feedback:</h3>
@@ -276,4 +276,4 @@ const ChatInput = ({
     </div>
   );
 };
-export default ChatInput;
+export default ChatInterface;
