@@ -18,10 +18,10 @@ import "./Chat.scss";
 interface ChatInterfaceProps {
   chatRoomId: string;
   setChatRoomId: (chatRoomId: string) => void;
-  senderUserInfo: string;
-  recipientUserInfo: string;
-  setSenderUserInfo: (senderUserInfo: string) => void;
-  setRecipientUserInfo: (recipientUserInfo: string) => void;
+  senderUserInfo: IUserInfo;
+  recipientUserInfo: IUserInfo;
+  setSenderUserInfo: (senderUserInfo: IUserInfo) => void;
+  setRecipientUserInfo: (recipientUserInfo: IUserInfo) => void;
 }
 
 const ChatInterface = ({
@@ -73,8 +73,8 @@ const ChatInterface = ({
 
   const deleteCallRequestData = async () => {
     const callRequestRef = ref(dbChat, "callRequests");
-    setSenderUserInfo("");
-    setRecipientUserInfo("");
+    setSenderUserInfo({ username: "", userphoto: "" });
+    setRecipientUserInfo({ username: "", userphoto: "" });
 
     try {
       const snapshot = await get(callRequestRef);
@@ -130,7 +130,7 @@ const ChatInterface = ({
               (callRequest.recipient !== userUID && callRequest.recipient) ||
               (callRequest.sender !== userUID && callRequest.sender)
             }`,
-            username: senderUserInfo || recipientUserInfo,
+            username: senderUserInfo.username || recipientUserInfo.username,
           });
         }
       }

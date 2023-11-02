@@ -28,8 +28,14 @@ const ChatPage = () => {
   const navigate = useNavigate();
 
   const [chatRoomId, setChatRoomId] = useState("");
-  const [senderUserInfo, setSenderUserInfo] = useState("");
-  const [recipientUserInfo, setRecipientUserInfo] = useState("");
+  const [senderUserInfo, setSenderUserInfo] = useState<IUserInfo>({
+    username: "",
+    userphoto: "",
+  });
+  const [recipientUserInfo, setRecipientUserInfo] = useState<IUserInfo>({
+    username: "",
+    userphoto: "",
+  });
   const [recipientStatus, setRecipientStatus] = useState("");
   const [pendingCallRequests, setPendingCallRequests] = useState<
     IPendingCallRequestInfo[]
@@ -37,6 +43,7 @@ const ChatPage = () => {
   const [filterUsersBy, setFilterUsersBy] = useState("all");
   const [readyToChat, setReadyToChat] = useState(false);
   const [userProfilesLoading, setUserProfilesLoading] = useState(true);
+  const [isAvatarZoomed, setIsAvatarZoomed] = useState(false);
   useEffect(() => {
     const userProfilesRef = ref(dbChat, "userProfiles");
     const userUID = auth?.currentUser?.uid;
@@ -72,7 +79,8 @@ const ChatPage = () => {
 
   const initiateCall = (
     recipientUID: string,
-    recipientUserName: string
+    recipientUserName: string,
+    userPhoto: string
   ): void => {
     const callRequestRef = ref(dbChat, "callRequests");
     const senderUID = auth.currentUser?.uid;
@@ -82,6 +90,7 @@ const ChatPage = () => {
     );
     const newCallRequest: ICallRequest = {
       senderName: currentUserProfile?.displayName || "",
+      senderPhoto: currentUserProfile?.photo || "",
       sender: senderUID || "",
       recipient: recipientUID || "",
       status: "pending",
@@ -90,7 +99,10 @@ const ChatPage = () => {
 
     push(callRequestRef, newCallRequest);
 
-    setRecipientUserInfo(recipientUserName);
+    setRecipientUserInfo({
+      userphoto: userPhoto || "",
+      username: recipientUserName || "",
+    });
 
     setChatRoomIdForSender();
   };
@@ -124,7 +136,10 @@ const ChatPage = () => {
       );
 
       if (acceptedCall) {
-        setSenderUserInfo(acceptedCall.senderName);
+        setSenderUserInfo({
+          username: acceptedCall.senderName,
+          userphoto: acceptedCall.senderPhoto,
+        });
       }
 
       pendingCallRequests.forEach(async (pendingCall) => {
@@ -195,14 +210,14 @@ const ChatPage = () => {
             callRequest.sender === userUID &&
             callRequest.status === "rejected"
           ) {
-            setRecipientUserInfo("");
+            setRecipientUserInfo({ username: "", userphoto: "" });
           }
           const userIsSender = Object.values(callRequests).find(
             (callRequest: any) => callRequest.sender === userUID
           );
 
           if (!userIsSender) {
-            setRecipientUserInfo("");
+            setRecipientUserInfo({ username: "", userphoto: "" });
           }
         }
       });
@@ -231,6 +246,7 @@ const ChatPage = () => {
             if (!exists) {
               const newPendingCall = {
                 senderName: callRequest.senderName,
+                senderPhoto: callRequest.senderPhoto,
                 status: callRequest.status,
                 key: callRequestKey,
               };
@@ -257,7 +273,7 @@ const ChatPage = () => {
         }
         if (callRequest.sender === userUID && recipientStatus === "rejected") {
           rejectCall(callRequestKey);
-          setRecipientUserInfo("");
+          setRecipientUserInfo({ username: "", userphoto: "" });
         }
       }
     };
@@ -324,6 +340,9 @@ const ChatPage = () => {
         update(child(userProfilesRef, userUID), {
           status: "online",
         });
+      }
+      if (!chatRoomId && isAvatarZoomed) {
+        setIsAvatarZoomed(false);
       }
     }
 
@@ -438,20 +457,61 @@ const ChatPage = () => {
             </div>
           </>
         )}
-        <h3 className="userInfo">
-          {senderUserInfo && chatRoomId && (
+
+        <div className="chattingUserInfo">
+          {senderUserInfo.username && chatRoomId && (
             <>
-              You're chatting to <span>{senderUserInfo}</span>
+              <div className="chattingUser-photo">
+                {isAvatarZoomed ? (
+                  <div className="zoomed-avatar">
+                    <img
+                      src={senderUserInfo.userphoto}
+                      alt="Zoomed user photo"
+                      onClick={() => setIsAvatarZoomed(false)}
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={senderUserInfo.userphoto}
+                    alt="User photo"
+                    onClick={() => setIsAvatarZoomed(true)}
+                  />
+                )}
+              </div>
+              <p>
+                You're chatting to <span>{senderUserInfo.username}</span>
+              </p>
             </>
           )}
-        </h3>
-        <h3 className="userInfo">
-          {recipientUserInfo && chatRoomId && (
+        </div>
+        <div className="chattingUserInfo">
+          {recipientUserInfo.username && chatRoomId && (
             <>
-              You're chatting to <span>{recipientUserInfo}</span>
+              <div className="chattingUser-photo">
+                <div className="chattingUser-photo">
+                  {isAvatarZoomed ? (
+                    <div className="zoomed-avatar">
+                      <img
+                        src={recipientUserInfo.userphoto}
+                        alt="Zoomed user photo"
+                        onClick={() => setIsAvatarZoomed(false)}
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={recipientUserInfo.userphoto}
+                      alt="User photo"
+                      onClick={() => setIsAvatarZoomed(true)}
+                    />
+                  )}
+                </div>
+              </div>
+              <p>
+                You're chatting to <span>{recipientUserInfo.username}</span>
+              </p>
             </>
           )}
-        </h3>
+        </div>
         {chatRoomId.length === 0 && (
           <ul className="users">
             {userProfilesLoading ? (
@@ -463,7 +523,11 @@ const ChatPage = () => {
                 if (user.uid !== auth.currentUser?.uid) {
                   return (
                     <li key={user.uid}>
-                      {user.displayName}
+                      <div className="userPhoto-container">
+                        <img src={user.photo} alt="user photo" />
+                      </div>
+
+                      <p className="user-name">{user.displayName}</p>
 
                       <b>👍{user.feedback?.likes}</b>
                       <b>👎{user.feedback?.dislikes}</b>
@@ -490,7 +554,9 @@ const ChatPage = () => {
                             ? "This user is ready"
                             : "This user is Offline"
                         }
-                        onClick={() => initiateCall(user.uid, user.displayName)}
+                        onClick={() =>
+                          initiateCall(user.uid, user.displayName, user.photo)
+                        }
                         disabled={
                           user.status === "offline" ||
                           user.status === "chatting"
@@ -518,20 +584,23 @@ const ChatPage = () => {
         {!chatRoomId && (
           <div
             className={
-              recipientUserInfo.length > 0 || senderUserInfo.length > 0
+              recipientUserInfo.username || senderUserInfo.username.length > 0
                 ? "call-notices-active"
                 : ""
             }
           >
             <div
               className={
-                recipientUserInfo.length > 0
+                recipientUserInfo.username
                   ? "recipientUserInfo-active"
                   : "recipientUserInfo-inactive"
               }
             >
               <div className="recipientUser-content">
-                <h4>{recipientUserInfo}</h4>
+                <div className="recipientUser-photo">
+                  <img src={recipientUserInfo.userphoto} alt="user photo" />
+                </div>
+                <h4>{recipientUserInfo.username}</h4>
                 <button
                   className="cancel-button"
                   onClick={handleCancelCallForRecipient}
@@ -542,7 +611,7 @@ const ChatPage = () => {
             </div>
             <div
               className={
-                pendingCallRequests.length > 0 && recipientUserInfo.length === 0
+                pendingCallRequests.length > 0 && !recipientUserInfo.username
                   ? "senderUserContainer-active"
                   : "senderUserContainer-inactive"
               }
@@ -551,18 +620,21 @@ const ChatPage = () => {
                 pendingCallRequests.map((user) => (
                   <div key={user.key} className="senderUserNotice-active">
                     <div className="senderUserNotice-content">
-                      {recipientUserInfo.length > 0 && (
+                      {recipientUserInfo.username && (
                         <div className="info-message">
                           You are currently calling to
-                          <span> {recipientUserInfo}</span>. Please cancel your
-                          current call before accepting a new one.
+                          <span> {recipientUserInfo.username}</span>. Please
+                          cancel your current call before accepting a new one.
                         </div>
                       )}
+                      <div className="senderUser-photo">
+                        <img src={user.senderPhoto} alt="user photo" />
+                      </div>
                       <h4>{user.senderName}</h4>
                       <div className="senderUserNotice-content-buttons">
                         <button
                           className="accept-button"
-                          disabled={recipientUserInfo.length > 0}
+                          disabled={recipientUserInfo.username ? true : false}
                           onClick={() => acceptCall(user.key)}
                         >
                           Accept

@@ -3,15 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getDatabase } from "firebase/database";
 import { getFirestore } from "firebase/firestore";
-
+import { getStorage } from "firebase/storage";
 // import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-
-// Now you can use the 'auth' object to implement authentication features.
 
 const firebaseConfig = {
   apiKey: "AIzaSyCSCXJLpmwOx0K_9g8mB1kJCKPcsQc5Dow",
@@ -30,4 +23,5 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const dbChat = getDatabase();
+export const storage = getStorage();
 export default app;

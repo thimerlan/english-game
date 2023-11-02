@@ -6,12 +6,21 @@ import { auth, dbChat } from "../../firebaseConfig";
 import { get, ref, update } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import { PropagateLoader } from "react-spinners";
+import { FcEditImage, FcImageFile } from "react-icons/fc";
+import {
+  getStorage,
+  ref as storageRef,
+  uploadBytes,
+  getDownloadURL,
+} from "firebase/storage";
+
 import NavBar from "../../components/NavBar/NavBar";
 import "./Dashboard.scss";
 
 interface IUserProfile {
-  uid: string;
   displayName: string;
+  photo: string;
+  uid: string;
   status: string;
   feedback: feedback;
 }
@@ -23,6 +32,9 @@ const Dashboard = () => {
   const [userNameError, setUserNameError] = useState("");
   const [editProfileModal, setEditProfileModal] = useState(false);
   const [updatingProfile, setUpdatingProfile] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isAvatarZoomed, setIsAvatarZoomed] = useState(false);
+
   const userUID = auth.currentUser?.uid;
 
   useEffect(() => {
@@ -67,9 +79,8 @@ const Dashboard = () => {
         displayName: userName,
       });
       const userProfileSnapshot = await get(userProfileRef);
-      const userProfileData = userProfileSnapshot.val();
 
-      setUserProfile(userProfileData);
+      setUserProfile(userProfileSnapshot.val());
       setUpdatingProfile(false);
       cleanStatesForEditFeature();
     } catch (error) {
@@ -80,6 +91,44 @@ const Dashboard = () => {
     cleanStatesForEditFeature();
   };
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setSelectedFile(files[0]);
+      handleFileUpload(files[0]);
+    }
+  };
+  const handleFileUpload = async (file: File | null) => {
+    if (!file) {
+      return;
+    }
+    setUpdatingProfile(true);
+
+    const storage = getStorage();
+    const userPhotoRef = storageRef(storage, `${userUID}/profile-photo.jpg`);
+    const userProfileRef = ref(dbChat, `userProfiles/${userUID}`);
+
+    const uploadImage = uploadBytes(userPhotoRef, file);
+
+    try {
+      await uploadImage;
+
+      const downloadURL = await getDownloadURL(userPhotoRef);
+
+      await update(userProfileRef, { photo: downloadURL });
+
+      const userProfileSnapshot = await get(userProfileRef);
+      setUserProfile(userProfileSnapshot.val());
+
+      setUpdatingProfile(false);
+      setSelectedFile(null);
+      cleanStatesForEditFeature();
+
+      console.log("Photo uploaded successfully.");
+    } catch (error) {
+      console.error("Error uploading photo:", error);
+    }
+  };
   return (
     <>
       <NavBar goToBack={"Go to back"} />
@@ -95,6 +144,23 @@ const Dashboard = () => {
             {!userProfileLoading ? (
               userProfile ? (
                 <div className="userProfile-container">
+                  <div className="user-photo">
+                    {isAvatarZoomed ? (
+                      <div className="zoomed-avatar">
+                        <img
+                          src={userProfile.photo}
+                          alt="Zoomed user photo"
+                          onClick={() => setIsAvatarZoomed(false)}
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={userProfile.photo}
+                        alt="User photo"
+                        onClick={() => setIsAvatarZoomed(true)}
+                      />
+                    )}
+                  </div>
                   <h1>Welcome, {userProfile.displayName}!</h1>
                   <div className="editProfile">
                     <button
@@ -118,6 +184,7 @@ const Dashboard = () => {
                           &#10008;
                         </button>
                         <input
+                          disabled={updatingProfile}
                           type="text"
                           placeholder="New name:"
                           maxLength={20}
@@ -126,17 +193,55 @@ const Dashboard = () => {
                             setUserName(e.target.value)
                           }
                         />
+                        {userName.length >= 20 && (
+                          <p className="error-message">
+                            Maximum character limit reached.
+                          </p>
+                        )}
                         {userNameError && (
                           <p className="error-message">{userNameError}!</p>
                         )}
+                        <input
+                          id="fileInput"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileChange}
+                          disabled={
+                            selectedFile || updatingProfile ? true : false
+                          }
+                        />
+                        <label
+                          htmlFor="fileInput"
+                          className="custom-file-label"
+                          title={
+                            selectedFile
+                              ? "Updating a new photo..."
+                              : "Choose a new photo"
+                          }
+                        >
+                          {selectedFile ? (
+                            <>
+                              {selectedFile.name}
+                              <span>
+                                <FcImageFile />
+                              </span>
+                            </>
+                          ) : (
+                            <FcEditImage size={28} />
+                          )}
+                        </label>
+
                         {updatingProfile && (
                           <p className="updatingProfile-message">
                             Updating your profile...
                           </p>
                         )}
                         <button
-                          className="update-userProfile"
+                          className="update-userProfile-btn"
                           onClick={handleUpdateUserProfile}
+                          disabled={
+                            !selectedFile && userName.length > 0 ? false : true
+                          }
                         >
                           Update
                         </button>
