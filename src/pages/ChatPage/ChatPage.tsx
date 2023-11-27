@@ -527,12 +527,17 @@ const ChatPage = () => {
                         <img src={user.photo} alt="user photo" />
                       </div>
 
-                      <p className="user-name">{user.displayName}</p>
+                      <p className="user-name"> {user.displayName}</p>
 
-                      <b>👍{user.feedback?.likes}</b>
-                      <b>👎{user.feedback?.dislikes}</b>
+                      <p className="user-age">
+                        {user.age ? "age: " + user.age : ""}
+                      </p>
+                      <div className="user-feedbacks">
+                        <span>👍{user.feedback?.likes}</span>
+                        <span>👎{user.feedback?.dislikes}</span>
+                      </div>
 
-                      <span>
+                      <span className="status-user">
                         <RiRadioButtonLine
                           color={
                             user.status === "online"

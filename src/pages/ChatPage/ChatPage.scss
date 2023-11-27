@@ -62,7 +62,7 @@
 .users {
   width: 20%;
   margin: 0 auto;
-  padding-top: 10px;
+  margin-top: 40px;
   padding-bottom: 20px;
 
   li {
@@ -71,7 +71,7 @@
     padding: 4px;
     color: #ffffff;
     font-weight: 555;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
     background-color: rgb(250, 51, 6);
     display: flex;
     justify-content: space-between;
@@ -80,8 +80,36 @@
     position: relative;
     transition: 0.3s all ease;
     font-size: 1.2rem;
+
+    &:hover {
+      transform: translate3d(-2px, 3px, 4px);
+      background-color: #1487bc;
+    }
     p.user-name {
       color: #f8fff3;
+      text-align: center;
+      width: auto;
+      text-wrap: wrap;
+      font-size: 19px;
+    }
+    p.user-age {
+      color: #f8fff3;
+      text-align: center;
+      text-wrap: wrap;
+      font-size: 18.5px;
+      margin-right: 5px;
+    }
+    .user-feedbacks {
+      background-color: #ef640d;
+      position: absolute;
+      top: -25px;
+      right: 35px;
+      padding: 3px;
+      border-radius: 1.1ex;
+      span {
+        font-size: 19px;
+        color: #edf5ff;
+      }
     }
     .userPhoto-container {
       width: 50px;
@@ -96,11 +124,7 @@
       }
     }
 
-    &:hover {
-      transform: translate3d(-2px, 3px, 4px);
-      background-color: #0975a7;
-    }
-    span {
+    span.status-user {
       position: absolute;
       right: 0;
       top: -17px;

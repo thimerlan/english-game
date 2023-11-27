@@ -19,19 +19,31 @@ import "./Dashboard.scss";
 
 interface IUserProfile {
   displayName: string;
+  age: string;
   photo: string;
   uid: string;
   status: string;
   feedback: feedback;
 }
+interface IUserProfileData {
+  userName: string;
+  userAge: string;
+}
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
 
   const [userProfileLoading, setUserProfileLoading] = useState(true);
-  const [userName, setUserName] = useState("");
-  const [userNameError, setUserNameError] = useState("");
+  const [userProfileData, setUserProfileData] = useState<IUserProfileData>({
+    userName: "",
+    userAge: "",
+  });
+  const [errorMessages, setErrorMessages] = useState<IUserProfileData>({
+    userName: "",
+    userAge: "",
+  });
+
   const [editProfileModal, setEditProfileModal] = useState(false);
-  const [updatingProfile, setUpdatingProfile] = useState(false);
+  const [updatingProfileLoading, setUpdatingProfileLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isAvatarZoomed, setIsAvatarZoomed] = useState(false);
 
@@ -44,9 +56,9 @@ const Dashboard = () => {
 
         try {
           const userProfileSnapshot = await get(userProfileRef);
-          const userProfileData = userProfileSnapshot.val();
+          const userProfileDatas = userProfileSnapshot.val();
 
-          setUserProfile(userProfileData);
+          setUserProfile(userProfileDatas);
         } catch (error) {
           console.error("Error retrieving user profile:", error);
         } finally {
@@ -61,34 +73,62 @@ const Dashboard = () => {
       unsubscribe();
     };
   }, [auth.currentUser]);
-  function cleanStatesForEditFeature(): void {
-    setUserName("");
-    setUserNameError("");
+
+  function resetEditProfileAndModalStates(): void {
+    setUserProfileData({ userName: "", userAge: "" });
+    setErrorMessages({ userName: "", userAge: "" });
     setEditProfileModal(false);
   }
-  const handleUpdateUserProfile = async (): Promise<void> => {
-    if (userName.trim() === "") {
-      setUserNameError("Username cannot be empty");
-      return;
+  function closeEditProfileModal(): void {
+    resetEditProfileAndModalStates();
+  }
+  const handleUpdateUserDate = (e: ChangeEvent<HTMLInputElement>): void => {
+    const { value, name } = e.target;
+    setUserProfileData((prevValues) => ({
+      ...prevValues,
+      [e.target.name]: e.target.value,
+    }));
+    if (name === "userName") {
+      setErrorMessages((prevErrorMessages) => ({
+        ...prevErrorMessages,
+        userName:
+          value && value.trim() === "" ? "Username cannot be empty" : "",
+      }));
     }
-    setUpdatingProfile(true);
+
+    if (name === "userAge") {
+      const ageNumber = Number(value);
+      setErrorMessages((prevErrorMessages) => ({
+        ...prevErrorMessages,
+        userAge:
+          ageNumber > 100 || (ageNumber < 8 && value.length > 0)
+            ? "Age must be between 8 and 100"
+            : "",
+      }));
+    }
+  };
+
+  const handleUpdateUserProfile = async (): Promise<void> => {
+    const { userName, userAge } = userProfileData;
+
+    setUpdatingProfileLoading(true);
+
     const userProfileRef = ref(dbChat, `userProfiles/${userUID}`);
 
     try {
       await update(userProfileRef, {
-        displayName: userName,
+        displayName: userName.trim() || userProfile?.displayName,
+        age: userAge || userProfile?.age,
       });
+
       const userProfileSnapshot = await get(userProfileRef);
 
       setUserProfile(userProfileSnapshot.val());
-      setUpdatingProfile(false);
-      cleanStatesForEditFeature();
+      setUpdatingProfileLoading(false);
+      closeEditProfileModal();
     } catch (error) {
       console.error("Error updating user profile:", error);
     }
-  };
-  const closeEditProfileModal = (): void => {
-    cleanStatesForEditFeature();
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +142,7 @@ const Dashboard = () => {
     if (!file) {
       return;
     }
-    setUpdatingProfile(true);
+    setUpdatingProfileLoading(true);
 
     const storage = getStorage();
     const userPhotoRef = storageRef(storage, `${userUID}/profile-photo.jpg`);
@@ -120,15 +160,38 @@ const Dashboard = () => {
       const userProfileSnapshot = await get(userProfileRef);
       setUserProfile(userProfileSnapshot.val());
 
-      setUpdatingProfile(false);
+      setUpdatingProfileLoading(false);
       setSelectedFile(null);
-      cleanStatesForEditFeature();
+      resetEditProfileAndModalStates();
 
       console.log("Photo uploaded successfully.");
     } catch (error) {
       console.error("Error uploading photo:", error);
     }
   };
+
+  const isDisableUpdateButton = (): boolean => {
+    const { userName, userAge } = userProfileData;
+    const trimmedUserName = userName.trim();
+    const numericAge = Number(userAge);
+    const isNameEmpty = trimmedUserName === "";
+    const isAgeInvalid = numericAge < 7 || numericAge > 100;
+
+    if (selectedFile) return true;
+
+    if (!isNameEmpty && errorMessages.userAge.length === 0) return false;
+
+    if (userName.length > 0 && isAgeInvalid) return true;
+
+    if (userName.length && isNameEmpty && !isAgeInvalid) return true;
+
+    if (!isAgeInvalid) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return (
     <>
       <NavBar goToBack={"Go to back"} />
@@ -161,7 +224,15 @@ const Dashboard = () => {
                       />
                     )}
                   </div>
-                  <h1>Welcome, {userProfile.displayName}!</h1>
+                  <div className="user__data">
+                    <p>
+                      name: <span>{userProfile.displayName}</span>
+                    </p>
+                    <p>
+                      age:
+                      <span>{userProfile.age ? userProfile.age : "-"}</span>
+                    </p>
+                  </div>
                   <div className="editProfile">
                     <button
                       onClick={() => setEditProfileModal(true)}
@@ -184,22 +255,45 @@ const Dashboard = () => {
                           &#10008;
                         </button>
                         <input
-                          disabled={updatingProfile}
+                          disabled={updatingProfileLoading}
                           type="text"
+                          name="userName"
                           placeholder="New name:"
-                          maxLength={20}
-                          value={userName}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            setUserName(e.target.value)
-                          }
+                          autoComplete="off"
+                          maxLength={18}
+                          value={userProfileData.userName}
+                          onChange={handleUpdateUserDate}
                         />
-                        {userName.length >= 20 && (
+
+                        {userProfileData.userName.length === 18 && (
                           <p className="error-message">
                             Maximum character limit reached.
                           </p>
                         )}
-                        {userNameError && (
-                          <p className="error-message">{userNameError}!</p>
+                        {errorMessages.userName && (
+                          <p className="error-message">
+                            {errorMessages.userName}!
+                          </p>
+                        )}
+
+                        <input
+                          disabled={updatingProfileLoading}
+                          type="number"
+                          minLength={1}
+                          maxLength={3}
+                          min="8"
+                          max="100"
+                          name="userAge"
+                          placeholder="New age:"
+                          autoComplete="off"
+                          value={userProfileData.userAge}
+                          onChange={handleUpdateUserDate}
+                        />
+
+                        {errorMessages.userAge && (
+                          <p className="error-message">
+                            {errorMessages.userAge}!
+                          </p>
                         )}
                         <input
                           id="fileInput"
@@ -207,7 +301,9 @@ const Dashboard = () => {
                           accept="image/*"
                           onChange={handleFileChange}
                           disabled={
-                            selectedFile || updatingProfile ? true : false
+                            selectedFile || updatingProfileLoading
+                              ? true
+                              : false
                           }
                         />
                         <label
@@ -231,7 +327,7 @@ const Dashboard = () => {
                           )}
                         </label>
 
-                        {updatingProfile && (
+                        {updatingProfileLoading && (
                           <p className="updatingProfile-message">
                             Updating your profile...
                           </p>
@@ -239,9 +335,7 @@ const Dashboard = () => {
                         <button
                           className="update-userProfile-btn"
                           onClick={handleUpdateUserProfile}
-                          disabled={
-                            !selectedFile && userName.length > 0 ? false : true
-                          }
+                          disabled={isDisableUpdateButton()}
                         >
                           Update
                         </button>

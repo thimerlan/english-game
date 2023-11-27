@@ -9,6 +9,7 @@ interface feedback {
 }
 interface IUserProfiles {
   displayName: string;
+  age: string;
   photo: string;
   uid: string;
   status: string;
