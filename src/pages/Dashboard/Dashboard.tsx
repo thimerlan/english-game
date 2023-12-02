@@ -7,6 +7,8 @@ import { get, ref, update } from "firebase/database";
 import { onAuthStateChanged } from "firebase/auth";
 import { PropagateLoader } from "react-spinners";
 import { FcEditImage, FcImageFile } from "react-icons/fc";
+import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
+
 import {
   getStorage,
   ref as storageRef,
@@ -20,6 +22,7 @@ import "./Dashboard.scss";
 interface IUserProfile {
   displayName: string;
   age: string;
+  gender: TypeGender;
   photo: string;
   uid: string;
   status: string;
@@ -28,7 +31,13 @@ interface IUserProfile {
 interface IUserProfileData {
   userName: string;
   userAge: string;
+  userGender: string;
 }
+
+interface IUserProfileDataErros extends Omit<IUserProfileData, "userGender"> {}
+
+type TypeGender = "female" | "male" | "";
+
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
 
@@ -36,8 +45,9 @@ const Dashboard = () => {
   const [userProfileData, setUserProfileData] = useState<IUserProfileData>({
     userName: "",
     userAge: "",
+    userGender: "",
   });
-  const [errorMessages, setErrorMessages] = useState<IUserProfileData>({
+  const [errorMessages, setErrorMessages] = useState<IUserProfileDataErros>({
     userName: "",
     userAge: "",
   });
@@ -75,7 +85,7 @@ const Dashboard = () => {
   }, [auth.currentUser]);
 
   function resetEditProfileAndModalStates(): void {
-    setUserProfileData({ userName: "", userAge: "" });
+    setUserProfileData({ userName: "", userAge: "", userGender: "" });
     setErrorMessages({ userName: "", userAge: "" });
     setEditProfileModal(false);
   }
@@ -84,10 +94,12 @@ const Dashboard = () => {
   }
   const handleUpdateUserDate = (e: ChangeEvent<HTMLInputElement>): void => {
     const { value, name } = e.target;
+
     setUserProfileData((prevValues) => ({
       ...prevValues,
       [e.target.name]: e.target.value,
     }));
+
     if (name === "userName") {
       setErrorMessages((prevErrorMessages) => ({
         ...prevErrorMessages,
@@ -108,8 +120,15 @@ const Dashboard = () => {
     }
   };
 
+  const handleGenderSelection = (gender: TypeGender): void => {
+    setUserProfileData((prevData) => ({
+      ...prevData,
+      userGender: gender,
+    }));
+  };
+
   const handleUpdateUserProfile = async (): Promise<void> => {
-    const { userName, userAge } = userProfileData;
+    const { userName, userAge, userGender } = userProfileData;
 
     setUpdatingProfileLoading(true);
 
@@ -118,7 +137,8 @@ const Dashboard = () => {
     try {
       await update(userProfileRef, {
         displayName: userName.trim() || userProfile?.displayName,
-        age: userAge || userProfile?.age,
+        age: userAge || userProfile?.age || "",
+        gender: userGender || userProfile?.gender || "",
       });
 
       const userProfileSnapshot = await get(userProfileRef);
@@ -131,14 +151,14 @@ const Dashboard = () => {
     }
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const files = event.target.files;
     if (files && files.length > 0) {
       setSelectedFile(files[0]);
       handleFileUpload(files[0]);
     }
   };
-  const handleFileUpload = async (file: File | null) => {
+  const handleFileUpload = async (file: File | null): Promise<void> => {
     if (!file) {
       return;
     }
@@ -171,11 +191,11 @@ const Dashboard = () => {
   };
 
   const isDisableUpdateButton = (): boolean => {
-    const { userName, userAge } = userProfileData;
+    const { userName, userAge, userGender } = userProfileData;
     const trimmedUserName = userName.trim();
     const numericAge = Number(userAge);
     const isNameEmpty = trimmedUserName === "";
-    const isAgeInvalid = numericAge < 7 || numericAge > 100;
+    const isAgeInvalid = numericAge < 8 || numericAge > 100;
 
     if (selectedFile) return true;
 
@@ -184,6 +204,13 @@ const Dashboard = () => {
     if (userName.length > 0 && isAgeInvalid) return true;
 
     if (userName.length && isNameEmpty && !isAgeInvalid) return true;
+
+    if (userGender && errorMessages.userAge) return true;
+
+    if (userGender) return false;
+
+    if (userGender && !isNameEmpty && errorMessages.userAge.length === 0)
+      return false;
 
     if (!isAgeInvalid) {
       return false;
@@ -232,6 +259,22 @@ const Dashboard = () => {
                       age:
                       <span>{userProfile.age ? userProfile.age : "-"}</span>
                     </p>
+                    <p>
+                      gender:
+                      <span>
+                        {userProfile.gender === "male" ? (
+                          <i title="Male" className="g-ma">
+                            <CgGenderMale />
+                          </i>
+                        ) : userProfile.gender === "female" ? (
+                          <i title="Female" className="g-fe">
+                            <CgGenderFemale />
+                          </i>
+                        ) : (
+                          "-"
+                        )}
+                      </span>
+                    </p>
                   </div>
                   <div className="editProfile">
                     <button
@@ -249,6 +292,7 @@ const Dashboard = () => {
                     >
                       <div className="editProfile-content">
                         <button
+                          disabled={updatingProfileLoading}
                           className="close-editProfile-modal"
                           onClick={closeEditProfileModal}
                         >
@@ -295,6 +339,45 @@ const Dashboard = () => {
                             {errorMessages.userAge}!
                           </p>
                         )}
+                        <div className="selectionGender">
+                          <p>Select a new gender:</p>
+                          <button
+                            disabled={updatingProfileLoading}
+                            className={
+                              userProfileData.userGender === "female"
+                                ? "selected-gender"
+                                : ""
+                            }
+                            onClick={() =>
+                              userProfileData.userGender === "female"
+                                ? handleGenderSelection("")
+                                : handleGenderSelection("female")
+                            }
+                          >
+                            Female
+                            <span className="g-fe">
+                              <CgGenderFemale />
+                            </span>
+                          </button>
+                          <button
+                            disabled={updatingProfileLoading}
+                            className={
+                              userProfileData.userGender === "male"
+                                ? "selected-gender"
+                                : ""
+                            }
+                            onClick={() =>
+                              userProfileData.userGender === "male"
+                                ? handleGenderSelection("")
+                                : handleGenderSelection("male")
+                            }
+                          >
+                            Male
+                            <span className="g-ma">
+                              <CgGenderMale />
+                            </span>
+                          </button>
+                        </div>
                         <input
                           id="fileInput"
                           type="file"

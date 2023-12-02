@@ -10,6 +10,7 @@ interface feedback {
 interface IUserProfiles {
   displayName: string;
   age: string;
+  gender: "female" | "male" | "";
   photo: string;
   uid: string;
   status: string;

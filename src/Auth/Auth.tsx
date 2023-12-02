@@ -19,6 +19,7 @@ const Auth = () => {
         const userProfileData: IUserProfiles = {
           displayName: displayName!,
           age: "",
+          gender: "",
           photo: auth.currentUser?.photoURL!,
           uid: uid!,
           status: "offline",
