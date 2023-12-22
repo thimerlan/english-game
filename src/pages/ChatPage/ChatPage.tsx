@@ -9,14 +9,15 @@ import {
   remove,
   update,
 } from "firebase/database";
-import ChatInterface from "../../components/ChatComponents/ChatInterface";
-import ChatList from "../../components/ChatComponents/ChatList";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { auth, dbChat } from "../../firebaseConfig";
-import { useNavigate } from "react-router-dom";
+import { CgGenderFemale, CgGenderMale } from "react-icons/cg";
 import { RiRadioButtonLine } from "react-icons/ri";
 import { PulseLoader, SyncLoader } from "react-spinners";
 
+import ChatInterface from "../../components/ChatComponents/ChatInterface";
+import ChatList from "../../components/ChatComponents/ChatList";
 import useChat from "../../hooks/useChat/useChat";
 import SignIn from "../../Auth/SignIn/SignIn";
 
@@ -531,6 +532,21 @@ const ChatPage = () => {
 
                       <p className="user-age">
                         {user.age ? "age: " + user.age : ""}
+                      </p>
+                      <p className="user-gender">
+                        <span>
+                          {user.gender === "male" ? (
+                            <i title="Male" className="g-ma">
+                              <CgGenderMale />
+                            </i>
+                          ) : user.gender === "female" ? (
+                            <i title="Female" className="g-fe">
+                              <CgGenderFemale />
+                            </i>
+                          ) : (
+                            ""
+                          )}
+                        </span>
                       </p>
                       <div className="user-feedbacks">
                         <span>👍{user.feedback?.likes}</span>

@@ -99,6 +99,29 @@
       font-size: 18.5px;
       margin-right: 5px;
     }
+    p.user-gender {
+      span {
+        vertical-align: top;
+        background-color: #ff7700;
+        color: rgb(255, 3, 3);
+        font-weight: 600;
+        border-radius: 5ex;
+        margin-left: 5px;
+        margin-right: 5px;
+
+        font-size: 25px;
+        i.g-fe {
+          color: #fc0404;
+          vertical-align: middle;
+          padding: 3px 4px;
+        }
+        i.g-ma {
+          color: #0c7ffa;
+          vertical-align: middle;
+          padding: 3px 4px;
+        }
+      }
+    }
     .user-feedbacks {
       background-color: #ef640d;
       position: absolute;
