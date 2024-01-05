@@ -11,6 +11,7 @@ interface IUserProfiles {
   displayName: string;
   age: string;
   gender: "female" | "male" | "";
+  englishLevel: "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "";
   photo: string;
   uid: string;
   status: string;

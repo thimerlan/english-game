@@ -20,6 +20,7 @@ const Auth = () => {
           displayName: displayName!,
           age: "",
           gender: "",
+          englishLevel: "",
           photo: auth.currentUser?.photoURL!,
           uid: uid!,
           status: "offline",

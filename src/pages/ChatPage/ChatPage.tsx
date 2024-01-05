@@ -525,7 +525,14 @@ const ChatPage = () => {
                   return (
                     <li key={user.uid}>
                       <div className="userPhoto-container">
-                        <img src={user.photo} alt="user photo" />
+                        <div className="userPhoto-container-main">
+                          <img src={user.photo} alt="user photo" />
+                        </div>
+                        {user.englishLevel ? (
+                          <span>{user.englishLevel}</span>
+                        ) : (
+                          ""
+                        )}
                       </div>
 
                       <p className="user-name"> {user.displayName}</p>

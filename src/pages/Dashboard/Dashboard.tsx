@@ -23,6 +23,7 @@ interface IUserProfile {
   displayName: string;
   age: string;
   gender: TypeGender;
+  englishLevel: TypeEnglishLevel;
   photo: string;
   uid: string;
   status: string;
@@ -32,11 +33,15 @@ interface IUserProfileData {
   userName: string;
   userAge: string;
   userGender: string;
+  userEnglishLevel: string;
 }
 
-interface IUserProfileDataErros extends Omit<IUserProfileData, "userGender"> {}
+interface IUserProfileDataErros
+  extends Omit<IUserProfileData, "userGender" | "userEnglishLevel"> {}
 
 type TypeGender = "female" | "male" | "";
+
+type TypeEnglishLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "";
 
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
@@ -46,6 +51,7 @@ const Dashboard = () => {
     userName: "",
     userAge: "",
     userGender: "",
+    userEnglishLevel: "",
   });
   const [errorMessages, setErrorMessages] = useState<IUserProfileDataErros>({
     userName: "",
@@ -85,7 +91,12 @@ const Dashboard = () => {
   }, [auth.currentUser]);
 
   function resetEditProfileAndModalStates(): void {
-    setUserProfileData({ userName: "", userAge: "", userGender: "" });
+    setUserProfileData({
+      userName: "",
+      userAge: "",
+      userGender: "",
+      userEnglishLevel: "",
+    });
     setErrorMessages({ userName: "", userAge: "" });
     setEditProfileModal(false);
   }
@@ -126,9 +137,14 @@ const Dashboard = () => {
       userGender: gender,
     }));
   };
-
+  const handleEnglishLevelSelection = (level: TypeEnglishLevel): void => {
+    setUserProfileData((prevData) => ({
+      ...prevData,
+      userEnglishLevel: level,
+    }));
+  };
   const handleUpdateUserProfile = async (): Promise<void> => {
-    const { userName, userAge, userGender } = userProfileData;
+    const { userName, userAge, userGender, userEnglishLevel } = userProfileData;
 
     setUpdatingProfileLoading(true);
 
@@ -139,6 +155,7 @@ const Dashboard = () => {
         displayName: userName.trim() || userProfile?.displayName,
         age: userAge || userProfile?.age || "",
         gender: userGender || userProfile?.gender || "",
+        englishLevel: userEnglishLevel || userProfile?.englishLevel || "",
       });
 
       const userProfileSnapshot = await get(userProfileRef);
@@ -191,7 +208,7 @@ const Dashboard = () => {
   };
 
   const isDisableUpdateButton = (): boolean => {
-    const { userName, userAge, userGender } = userProfileData;
+    const { userName, userAge, userGender, userEnglishLevel } = userProfileData;
     const trimmedUserName = userName.trim();
     const numericAge = Number(userAge);
     const isNameEmpty = trimmedUserName === "";
@@ -207,9 +224,16 @@ const Dashboard = () => {
 
     if (userGender && errorMessages.userAge) return true;
 
+    if (userEnglishLevel && errorMessages.userAge) return true;
+
     if (userGender) return false;
 
+    if (userEnglishLevel) return false;
+
     if (userGender && !isNameEmpty && errorMessages.userAge.length === 0)
+      return false;
+
+    if (userEnglishLevel && !isNameEmpty && errorMessages.userAge.length === 0)
       return false;
 
     if (!isAgeInvalid) {
@@ -274,6 +298,10 @@ const Dashboard = () => {
                           "-"
                         )}
                       </span>
+                    </p>
+                    <p>
+                      English level:
+                      <span>{userProfile.englishLevel || "-"}</span>
                     </p>
                   </div>
                   <div className="editProfile">
@@ -378,6 +406,107 @@ const Dashboard = () => {
                             </span>
                           </button>
                         </div>
+                        <div className="selectionEnglishLevel">
+                          <p>Select a new English level:</p>
+                          <div className="englishLevel-buttons">
+                            <button
+                              disabled={updatingProfileLoading}
+                              className={
+                                userProfileData.userEnglishLevel === "A1"
+                                  ? "selected-level-eng"
+                                  : ""
+                              }
+                              onClick={() =>
+                                userProfileData.userEnglishLevel === "A1"
+                                  ? handleEnglishLevelSelection("")
+                                  : handleEnglishLevelSelection("A1")
+                              }
+                            >
+                              <span>A1</span>
+                            </button>
+
+                            <button
+                              disabled={updatingProfileLoading}
+                              className={
+                                userProfileData.userEnglishLevel === "A2"
+                                  ? "selected-level-eng"
+                                  : ""
+                              }
+                              onClick={() =>
+                                userProfileData.userEnglishLevel === "A2"
+                                  ? handleEnglishLevelSelection("")
+                                  : handleEnglishLevelSelection("A2")
+                              }
+                            >
+                              <span>A2</span>
+                            </button>
+
+                            <button
+                              disabled={updatingProfileLoading}
+                              className={
+                                userProfileData.userEnglishLevel === "B1"
+                                  ? "selected-level-eng"
+                                  : ""
+                              }
+                              onClick={() =>
+                                userProfileData.userEnglishLevel === "B1"
+                                  ? handleEnglishLevelSelection("")
+                                  : handleEnglishLevelSelection("B1")
+                              }
+                            >
+                              <span>B1</span>
+                            </button>
+
+                            <button
+                              disabled={updatingProfileLoading}
+                              className={
+                                userProfileData.userEnglishLevel === "B2"
+                                  ? "selected-level-eng"
+                                  : ""
+                              }
+                              onClick={() =>
+                                userProfileData.userEnglishLevel === "B2"
+                                  ? handleEnglishLevelSelection("")
+                                  : handleEnglishLevelSelection("B2")
+                              }
+                            >
+                              <span>B2</span>
+                            </button>
+
+                            <button
+                              disabled={updatingProfileLoading}
+                              className={
+                                userProfileData.userEnglishLevel === "C1"
+                                  ? "selected-level-eng"
+                                  : ""
+                              }
+                              onClick={() =>
+                                userProfileData.userEnglishLevel === "C1"
+                                  ? handleEnglishLevelSelection("")
+                                  : handleEnglishLevelSelection("C1")
+                              }
+                            >
+                              <span>C1</span>
+                            </button>
+
+                            <button
+                              disabled={updatingProfileLoading}
+                              className={
+                                userProfileData.userEnglishLevel === "C2"
+                                  ? "selected-level-eng"
+                                  : ""
+                              }
+                              onClick={() =>
+                                userProfileData.userEnglishLevel === "C2"
+                                  ? handleEnglishLevelSelection("")
+                                  : handleEnglishLevelSelection("C2")
+                              }
+                            >
+                              <span>C2</span>
+                            </button>
+                          </div>
+                        </div>
+
                         <input
                           id="fileInput"
                           type="file"
