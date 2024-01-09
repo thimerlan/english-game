@@ -12,7 +12,7 @@ const Beginner = () => {
         will focus on developing fundamental skills, such as greetings,
         introductions, and simple conversations.
       </p>
-      <Link to="level/beginner">Go to Beginner level</Link>
+      <Link to="/soon">Go to Beginner level</Link>
     </div>
   );
 };

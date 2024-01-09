@@ -14,7 +14,7 @@ const UpperIntermediate = () => {
         discussions, and enhance your reading and writing abilities to express
         more nuanced ideas.
       </p>
-      <Link to="/upperIntermediate">Go to Upper Intermediate level</Link>
+      <Link to="/soon">Go to Upper Intermediate level</Link>
     </div>
   );
 };

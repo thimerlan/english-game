@@ -12,7 +12,7 @@ const Elementary = () => {
         yourself more fluently, engage in basic everyday conversations, and
         enhance your reading and writing skills.
       </p>
-      <Link to="/elementary">Go to Elementary level</Link>
+      <Link to="/soon">Go to Elementary level</Link>
     </div>
   );
 };

@@ -13,7 +13,7 @@ const Intermediate = () => {
         discussions on various topics. Reading comprehension and writing skills
         will also be emphasized.
       </p>
-      <Link to="/intermediate">Go to Intermediate level</Link>
+      <Link to="/soon">Go to Intermediate level</Link>
     </div>
   );
 };
