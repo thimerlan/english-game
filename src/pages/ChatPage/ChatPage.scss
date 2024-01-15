@@ -545,6 +545,114 @@
     box-shadow: 2px 1px 1px 1px #2577faa7;
     transform: scale(1.07);
   }
+  button.filterByUsersLevel-callModal-active {
+    background-color: #009dff;
+    position: relative;
+    transform: scale(1.05);
+    b {
+      font-family: "Belanosima";
+      position: absolute;
+      top: -57%;
+      left: 34%;
+      font-size: 13px;
+      background-color: #ef640d;
+      border-radius: 1ex;
+      padding: 0px 3px;
+    }
+  }
+  .filterByUserLevel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #068eefed;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .filterByUserLevel-container {
+      width: 360px;
+      height: 300px;
+      background-color: #ff6a07;
+      border-radius: 1ex;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      position: relative;
+      .howdoesitwork {
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 0;
+        b {
+          color: rgba(71, 48, 48, 0.933);
+          padding: 4px;
+        }
+      }
+      p {
+        font-size: 19px;
+        color: #fff0f0;
+        margin: 9px 0px;
+      }
+      .filterByUserLevelModalCloseButton {
+        position: absolute;
+        top: 10px;
+        padding: 5px 8px;
+        margin-right: 0px;
+        font-size: 21px;
+        background-color: #f40838;
+        box-shadow: none;
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+      .filterByUserLevel-buttons {
+        button {
+          background-color: #4aa2fa;
+          color: #feee;
+          padding: 2px 5px;
+          border-radius: 3px;
+          margin-right: 7px;
+          font-size: 20px;
+          cursor: pointer;
+          transition: 0.5s all cubic-bezier(0.075, 0.82, 0.165, 1);
+          font-weight: 600;
+
+          &:hover {
+            background-color: #20c0f5eb;
+            box-shadow: none;
+            transform: scale(1.05);
+          }
+          &:disabled {
+            background-color: #222;
+            transform: scale(0.9);
+            cursor: no-drop;
+          }
+        }
+        button.selectedLevel {
+          background-color: rgb(34, 227, 24);
+          transform: scale(1.05);
+        }
+      }
+      .resetSelectedLevel {
+        margin-top: 15px;
+        text-align: center;
+        button {
+          border-radius: 1.3ex;
+          background-color: #ff1100f0;
+          &:hover {
+            background-color: #e30f0feb;
+            box-shadow: none;
+            transform: scale(1);
+          }
+          &:disabled {
+            background-color: #222 !important;
+          }
+        }
+      }
+    }
+  }
 }
 .beReadyToChat {
   margin-top: 20px;

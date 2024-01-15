@@ -41,7 +41,16 @@ const ChatPage = () => {
   const [pendingCallRequests, setPendingCallRequests] = useState<
     IPendingCallRequestInfo[]
   >([]);
-  const [filterUsersBy, setFilterUsersBy] = useState("all");
+
+  const [filterUsersByStatus, setFilterUsersByStatus] = useState("all");
+  const [showModalFilterUserByLevel, setShowModalFilterUserByLevel] =
+    useState(false);
+  const [filterUsersByLevel, setFilterUsersByLevel] =
+    useState<IFilterUsersByLevel>({
+      from: "",
+      to: "",
+    });
+
   const [readyToChat, setReadyToChat] = useState(false);
   const [userProfilesLoading, setUserProfilesLoading] = useState(true);
   const [isAvatarZoomed, setIsAvatarZoomed] = useState(false);
@@ -307,18 +316,50 @@ const ChatPage = () => {
       return false;
     }
 
-    if (filterUsersBy === "all") {
-      return true;
-    } else if (filterUsersBy === "online") {
-      return user.status === "online";
-    } else if (filterUsersBy === "chatting") {
-      return user.status === "chatting";
-    } else if (filterUsersBy === "ready") {
-      return user.status === "ready";
-    } else if (filterUsersBy === "offline") {
-      return user.status === "offline";
+    const { status, englishLevel } = user;
+
+    switch (filterUsersByStatus) {
+      case "all":
+        return filterUsersByLevel.from && filterUsersByLevel.to
+          ? englishLevel >= filterUsersByLevel.from &&
+              englishLevel <= filterUsersByLevel.to
+          : true;
+
+      case "online":
+        return (
+          status === "online" &&
+          (!filterUsersByLevel.from ||
+            (englishLevel >= filterUsersByLevel.from &&
+              englishLevel <= filterUsersByLevel.to))
+        );
+
+      case "chatting":
+        return (
+          status === "chatting" &&
+          (!filterUsersByLevel.from ||
+            (englishLevel >= filterUsersByLevel.from &&
+              englishLevel <= filterUsersByLevel.to))
+        );
+
+      case "ready":
+        return (
+          status === "ready" &&
+          (!filterUsersByLevel.from ||
+            (englishLevel >= filterUsersByLevel.from &&
+              englishLevel <= filterUsersByLevel.to))
+        );
+
+      case "offline":
+        return (
+          status === "offline" &&
+          (!filterUsersByLevel.from ||
+            (englishLevel >= filterUsersByLevel.from &&
+              englishLevel <= filterUsersByLevel.to))
+        );
+
+      default:
+        return false;
     }
-    return false;
   });
 
   useEffect(() => {
@@ -353,6 +394,17 @@ const ChatPage = () => {
       });
     }
   }, [readyToChat, pendingCallRequests, chatRoomId]);
+
+  const handleFilterModalClose = () => {
+    setShowModalFilterUserByLevel(!showModalFilterUserByLevel);
+
+    if (filterUsersByLevel.from === "" || filterUsersByLevel.to === "") {
+      setFilterUsersByLevel({
+        from: "",
+        to: "",
+      });
+    }
+  };
 
   const isChatRoomEmpty = () => chatRoomId.length === 0;
 
@@ -426,35 +478,138 @@ const ChatPage = () => {
             <div className="filterUsersBy">
               <p>Filter users by: </p>
               <button
-                className={filterUsersBy === "all" ? "all" : ""}
-                onClick={() => setFilterUsersBy("all")}
+                className={filterUsersByStatus === "all" ? "all" : ""}
+                onClick={() => setFilterUsersByStatus("all")}
               >
                 All
               </button>
               <button
-                className={filterUsersBy === "online" ? "online" : ""}
-                onClick={() => setFilterUsersBy("online")}
+                className={filterUsersByStatus === "online" ? "online" : ""}
+                onClick={() => setFilterUsersByStatus("online")}
               >
                 Online
               </button>
               <button
-                className={filterUsersBy === "ready" ? "ready" : ""}
-                onClick={() => setFilterUsersBy("ready")}
+                className={filterUsersByStatus === "ready" ? "ready" : ""}
+                onClick={() => setFilterUsersByStatus("ready")}
               >
                 Ready
               </button>
               <button
-                className={filterUsersBy === "chatting" ? "chatting" : ""}
-                onClick={() => setFilterUsersBy("chatting")}
+                className={filterUsersByStatus === "chatting" ? "chatting" : ""}
+                onClick={() => setFilterUsersByStatus("chatting")}
               >
                 Chatting
               </button>
               <button
-                className={filterUsersBy === "offline" ? "offline" : ""}
-                onClick={() => setFilterUsersBy("offline")}
+                className={filterUsersByStatus === "offline" ? "offline" : ""}
+                onClick={() => setFilterUsersByStatus("offline")}
               >
                 Offline
               </button>
+              <button
+                className={
+                  filterUsersByLevel.from && filterUsersByLevel.to
+                    ? "filterByUsersLevel-callModal-active"
+                    : ""
+                }
+                onClick={() =>
+                  setShowModalFilterUserByLevel(!showModalFilterUserByLevel)
+                }
+              >
+                {filterUsersByLevel.from && filterUsersByLevel.to ? (
+                  <b>
+                    {filterUsersByLevel.from + " - " + filterUsersByLevel.to}
+                  </b>
+                ) : (
+                  ""
+                )}
+                Filter users by level
+              </button>
+              {showModalFilterUserByLevel ? (
+                <div className="filterByUserLevel">
+                  <div className="filterByUserLevel-container">
+                    <button
+                      className="filterByUserLevelModalCloseButton"
+                      onClick={handleFilterModalClose}
+                    >
+                      &#10008;
+                    </button>
+                    <p className="howdoesitwork">
+                      <b>
+                        To filter users by level, select two level and close the
+                        modal.
+                        <br />
+                        The results will be displayed properly.
+                      </b>
+                    </p>
+
+                    <p>
+                      Selected level{" "}
+                      {filterUsersByLevel.from
+                        ? `from ${filterUsersByLevel.from}`
+                        : "from ... "}{" "}
+                      {filterUsersByLevel.to
+                        ? ` to ${filterUsersByLevel.to}`
+                        : " to ... "}
+                    </p>
+
+                    <div className="filterByUserLevel-buttons">
+                      {["A1", "A2", "B1", "B2", "C1", "C2"].map((level) => (
+                        <button
+                          key={level}
+                          className={
+                            filterUsersByLevel.from === level ||
+                            filterUsersByLevel.to === level
+                              ? "selectedLevel"
+                              : ""
+                          }
+                          onClick={() => {
+                            setFilterUsersByLevel((prevData) => {
+                              if (!prevData.from) {
+                                return {
+                                  ...prevData,
+                                  from: level,
+                                };
+                              } else {
+                                return {
+                                  ...prevData,
+                                  to: level,
+                                };
+                              }
+                            });
+                          }}
+                          disabled={
+                            (filterUsersByLevel.from > level &&
+                              filterUsersByLevel.to === "") ||
+                            (filterUsersByLevel.from && filterUsersByLevel.to
+                              ? true
+                              : false)
+                          }
+                        >
+                          {level}
+                        </button>
+                      ))}
+                      <div className="resetSelectedLevel">
+                        <button
+                          disabled={
+                            filterUsersByLevel.from || filterUsersByLevel.to
+                              ? false
+                              : true
+                          }
+                          onClick={() =>
+                            setFilterUsersByLevel({ from: "", to: "" })
+                          }
+                        >
+                          reset filter
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </>
         )}

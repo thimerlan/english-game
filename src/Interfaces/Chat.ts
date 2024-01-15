@@ -47,3 +47,7 @@ interface Emoji {
   group: string;
   subGroup: string;
 }
+interface IFilterUsersByLevel {
+  from: string;
+  to: string;
+}
