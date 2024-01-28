@@ -499,7 +499,7 @@
     color: #25fa97;
     margin-right: 10px;
   }
-  button {
+  button.filter-button {
     font-family: "Poppins";
     border-radius: 1ex;
     padding: 4px 6px;
@@ -520,47 +520,113 @@
       box-shadow: 1px 1px 2px 3px #2d498fd4;
     }
   }
+  button.all {
+    background-color: #0080fff0;
+    box-shadow: 2px 1px 1px 1px #2577faa7;
+    transform: scale(1.07);
+    &:hover {
+      background-color: #077cf2f0;
+      box-shadow: 2px 1px 1px 1px #2577faa7;
+    }
+  }
   button.online {
     background-color: #22ff00e3;
     box-shadow: 2px 1px 1px 1px #25fa37b1;
     transform: scale(1.07);
+    &:hover {
+      background-color: #28f609e3;
+      box-shadow: 2px 1px 1px 1px #25fa37b1;
+    }
   }
   button.ready {
-    background-color: #00ff04f7;
+    background-color: #27ee04f7;
     box-shadow: 2px 1px 1px 1px #25faa1b1;
     transform: scale(1.07);
+    &:hover {
+      background-color: #01ef05ed;
+      box-shadow: 2px 1px 1px 1px #25faa1b1;
+    }
   }
   button.chatting {
     background-color: #00ff88f0;
     box-shadow: 2px 1px 1px 1px #00ff88a9;
     transform: scale(1.07);
+    &:hover {
+      background-color: #06ef82f0;
+      box-shadow: 2px 1px 1px 1px #00ff88a9;
+    }
   }
   button.offline {
     background-color: #ff0033f0;
     box-shadow: 2px 1px 1px 1px #fa2525a7;
     transform: scale(1.07);
-  }
-  button.all {
-    background-color: #0080fff0;
-    box-shadow: 2px 1px 1px 1px #2577faa7;
-    transform: scale(1.07);
-  }
-  button.filterByUsersLevel-callModal-active {
-    background-color: #009dff;
-    position: relative;
-    transform: scale(1.05);
-    b {
-      font-family: "Belanosima";
-      position: absolute;
-      top: -57%;
-      left: 34%;
-      font-size: 13px;
-      background-color: #ef640d;
-      border-radius: 1ex;
-      padding: 0px 3px;
+    &:hover {
+      background-color: #ef0f3bf0;
+      box-shadow: 2px 1px 1px 1px #fa2525a7;
     }
   }
-  .filterByUserLevel {
+
+  .filterUsersByLevel-block {
+    position: relative;
+    .show-selected-levels {
+      background-color: #1378887e;
+      position: absolute;
+      bottom: 95%;
+      left: 10%;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 2px 0px;
+      border-radius: 1ex;
+      b {
+        color: #fff;
+        font-family: "Belanosima";
+        font-size: 12px;
+        background-color: #ef640d;
+        border-radius: 1ex;
+        padding: 1px 3px;
+        margin-left: 7px;
+      }
+    }
+    .fastResetSelectedLevels {
+      margin-bottom: 3px;
+      button {
+        font-family: "Poppins";
+        cursor: pointer;
+        border-radius: 1ex;
+        padding: 3px 7px;
+        font-weight: 600;
+        color: #eee;
+        transition: 0.3s all ease;
+        background-color: #fc460f;
+        margin-right: 7px;
+        margin-left: 10px;
+        font-size: 12px;
+        transition: all 0.2s ease;
+        &:hover {
+          background-color: #e80b03;
+          transform: scale(1.04);
+        }
+      }
+    }
+    button.filterByUsersLevel-callModal-active {
+      background-color: #009dff !important;
+      transform: scale(1.04);
+      font-family: "Poppins";
+      border-radius: 1ex;
+      padding: 4px 5px;
+      font-weight: 555;
+      color: #eee;
+      transition: 0.3s all ease;
+      background-color: #4f4a41;
+      margin-right: 7px;
+      text-transform: capitalize;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 2px 4px 11px #0080ff;
+    }
+  }
+  .filterByUserLevel-section {
     position: fixed;
     top: 0;
     right: 0;
@@ -603,6 +669,10 @@
         font-size: 21px;
         background-color: #f40838;
         box-shadow: none;
+        color: #fefefe;
+        border-radius: 2ex;
+        cursor: pointer;
+        transition: 0.2s all ease;
         &:hover {
           transform: scale(1.05);
         }
@@ -611,14 +681,13 @@
         button {
           background-color: #4aa2fa;
           color: #feee;
-          padding: 2px 5px;
+          padding: 5px 5px;
           border-radius: 3px;
-          margin-right: 7px;
+          margin-right: 6px;
           font-size: 20px;
           cursor: pointer;
           transition: 0.5s all cubic-bezier(0.075, 0.82, 0.165, 1);
           font-weight: 600;
-
           &:hover {
             background-color: #20c0f5eb;
             box-shadow: none;

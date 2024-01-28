@@ -478,56 +478,90 @@ const ChatPage = () => {
             <div className="filterUsersBy">
               <p>Filter users by: </p>
               <button
-                className={filterUsersByStatus === "all" ? "all" : ""}
+                className={
+                  filterUsersByStatus === "all"
+                    ? "all filter-button"
+                    : "filter-button"
+                }
                 onClick={() => setFilterUsersByStatus("all")}
               >
                 All
               </button>
               <button
-                className={filterUsersByStatus === "online" ? "online" : ""}
+                className={
+                  filterUsersByStatus === "online"
+                    ? "online filter-button"
+                    : "filter-button"
+                }
                 onClick={() => setFilterUsersByStatus("online")}
               >
                 Online
               </button>
               <button
-                className={filterUsersByStatus === "ready" ? "ready" : ""}
+                className={
+                  filterUsersByStatus === "ready"
+                    ? "ready filter-button"
+                    : "filter-button"
+                }
                 onClick={() => setFilterUsersByStatus("ready")}
               >
                 Ready
               </button>
               <button
-                className={filterUsersByStatus === "chatting" ? "chatting" : ""}
+                className={
+                  filterUsersByStatus === "chatting"
+                    ? "chatting filter-button"
+                    : "filter-button"
+                }
                 onClick={() => setFilterUsersByStatus("chatting")}
               >
                 Chatting
               </button>
               <button
-                className={filterUsersByStatus === "offline" ? "offline" : ""}
+                className={
+                  filterUsersByStatus === "offline"
+                    ? "offline filter-button"
+                    : "filter-button"
+                }
                 onClick={() => setFilterUsersByStatus("offline")}
               >
                 Offline
               </button>
-              <button
-                className={
-                  filterUsersByLevel.from && filterUsersByLevel.to
-                    ? "filterByUsersLevel-callModal-active"
-                    : ""
-                }
-                onClick={() =>
-                  setShowModalFilterUserByLevel(!showModalFilterUserByLevel)
-                }
-              >
+              <div className="filterUsersByLevel-block">
                 {filterUsersByLevel.from && filterUsersByLevel.to ? (
-                  <b>
-                    {filterUsersByLevel.from + " - " + filterUsersByLevel.to}
-                  </b>
+                  <div className="show-selected-levels">
+                    <b>
+                      {filterUsersByLevel.from + " - " + filterUsersByLevel.to}
+                    </b>
+                    <div className="fastResetSelectedLevels">
+                      <button
+                        onClick={() =>
+                          setFilterUsersByLevel({ from: "", to: "" })
+                        }
+                      >
+                        reset
+                      </button>
+                    </div>
+                  </div>
                 ) : (
                   ""
                 )}
-                Filter users by level
-              </button>
+                <button
+                  className={
+                    filterUsersByLevel.from && filterUsersByLevel.to
+                      ? "filterByUsersLevel-callModal-active"
+                      : "filter-button"
+                  }
+                  onClick={() =>
+                    setShowModalFilterUserByLevel(!showModalFilterUserByLevel)
+                  }
+                >
+                  Filter users by level
+                </button>
+              </div>
+
               {showModalFilterUserByLevel ? (
-                <div className="filterByUserLevel">
+                <div className="filterByUserLevel-section">
                   <div className="filterByUserLevel-container">
                     <button
                       className="filterByUserLevelModalCloseButton"
