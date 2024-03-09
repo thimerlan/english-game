@@ -1,3 +1,8 @@
+// import BeginnerLevel from "./components/Levels/BeginnerLevel/BeginnerLevel.tsx";
+// import VocabularyQuiz from "./components/Levels/BeginnerLevel/VocabularyQuiz/VocabularyQuiz.tsx";
+// import WordQuiz from "./components/QuizComponents/VocabularyQuizTest/WordQuiz.tsx";
+// import GrammarCheckerPage from "./pages/GrammarCheckerPage/GrammarCheckerPage.tsx";
+
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
@@ -5,11 +10,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Dashboard from "./pages/Dashboard/Dashboard.tsx";
-// import BeginnerLevel from "./components/Levels/BeginnerLevel/BeginnerLevel.tsx";
-// import VocabularyQuiz from "./components/Levels/BeginnerLevel/VocabularyQuiz/VocabularyQuiz.tsx";
-// import WordQuiz from "./components/QuizComponents/VocabularyQuizTest/WordQuiz.tsx";
 import Dictionary from "./pages/Dictionary/Dictionary.tsx";
-import GrammarCheckerPage from "./pages/GrammarCheckerPage/GrammarCheckerPage.tsx";
 import ChatPage from "./pages/ChatPage/ChatPage.tsx";
 import ErrorRoute from "./components/ErrorRoute/ErrorRoute.tsx";
 import UnderConstruction from "./components/UnderConstruction/UnderConstruction.tsx";
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
     element: <Dictionary />,
   },
 
-  { path: "/grammar-checker", element: <GrammarCheckerPage /> },
+  { path: "/grammar-checker", element: <UnderConstruction /> },
 
   //PAGES
 
@@ -63,6 +64,7 @@ const router = createBrowserRouter([
     element: <ErrorRoute />,
   },
 ]);
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <RouterProvider router={router} />
