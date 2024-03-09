@@ -23,7 +23,7 @@ interface IUserProfile {
   displayName: string;
   age: string;
   gender: TypeGender;
-  englishLevel: TypeEnglishLevel;
+  englishLevel: "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "";
   photo: string;
   uid: string;
   status: string;
@@ -40,8 +40,6 @@ interface IUserProfileDataErros
   extends Omit<IUserProfileData, "userGender" | "userEnglishLevel"> {}
 
 type TypeGender = "female" | "male" | "";
-
-type TypeEnglishLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "";
 
 const Dashboard = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile>();
@@ -137,7 +135,7 @@ const Dashboard = () => {
       userGender: gender,
     }));
   };
-  const handleEnglishLevelSelection = (level: TypeEnglishLevel): void => {
+  const handleEnglishLevelSelection = (level: string): void => {
     setUserProfileData((prevData) => ({
       ...prevData,
       userEnglishLevel: level,
@@ -409,101 +407,26 @@ const Dashboard = () => {
                         <div className="selectionEnglishLevel">
                           <p>Select a new English level:</p>
                           <div className="englishLevel-buttons">
-                            <button
-                              disabled={updatingProfileLoading}
-                              className={
-                                userProfileData.userEnglishLevel === "A1"
-                                  ? "selected-level-eng"
-                                  : ""
-                              }
-                              onClick={() =>
-                                userProfileData.userEnglishLevel === "A1"
-                                  ? handleEnglishLevelSelection("")
-                                  : handleEnglishLevelSelection("A1")
-                              }
-                            >
-                              <span>A1</span>
-                            </button>
-
-                            <button
-                              disabled={updatingProfileLoading}
-                              className={
-                                userProfileData.userEnglishLevel === "A2"
-                                  ? "selected-level-eng"
-                                  : ""
-                              }
-                              onClick={() =>
-                                userProfileData.userEnglishLevel === "A2"
-                                  ? handleEnglishLevelSelection("")
-                                  : handleEnglishLevelSelection("A2")
-                              }
-                            >
-                              <span>A2</span>
-                            </button>
-
-                            <button
-                              disabled={updatingProfileLoading}
-                              className={
-                                userProfileData.userEnglishLevel === "B1"
-                                  ? "selected-level-eng"
-                                  : ""
-                              }
-                              onClick={() =>
-                                userProfileData.userEnglishLevel === "B1"
-                                  ? handleEnglishLevelSelection("")
-                                  : handleEnglishLevelSelection("B1")
-                              }
-                            >
-                              <span>B1</span>
-                            </button>
-
-                            <button
-                              disabled={updatingProfileLoading}
-                              className={
-                                userProfileData.userEnglishLevel === "B2"
-                                  ? "selected-level-eng"
-                                  : ""
-                              }
-                              onClick={() =>
-                                userProfileData.userEnglishLevel === "B2"
-                                  ? handleEnglishLevelSelection("")
-                                  : handleEnglishLevelSelection("B2")
-                              }
-                            >
-                              <span>B2</span>
-                            </button>
-
-                            <button
-                              disabled={updatingProfileLoading}
-                              className={
-                                userProfileData.userEnglishLevel === "C1"
-                                  ? "selected-level-eng"
-                                  : ""
-                              }
-                              onClick={() =>
-                                userProfileData.userEnglishLevel === "C1"
-                                  ? handleEnglishLevelSelection("")
-                                  : handleEnglishLevelSelection("C1")
-                              }
-                            >
-                              <span>C1</span>
-                            </button>
-
-                            <button
-                              disabled={updatingProfileLoading}
-                              className={
-                                userProfileData.userEnglishLevel === "C2"
-                                  ? "selected-level-eng"
-                                  : ""
-                              }
-                              onClick={() =>
-                                userProfileData.userEnglishLevel === "C2"
-                                  ? handleEnglishLevelSelection("")
-                                  : handleEnglishLevelSelection("C2")
-                              }
-                            >
-                              <span>C2</span>
-                            </button>
+                            {["A1", "A2", "B1", "B2", "C1", "C2"].map(
+                              (level: string) => (
+                                <button
+                                  key={level}
+                                  disabled={updatingProfileLoading}
+                                  className={
+                                    userProfileData.userEnglishLevel === level
+                                      ? "selected-level-eng"
+                                      : ""
+                                  }
+                                  onClick={() =>
+                                    userProfileData.userEnglishLevel === level
+                                      ? handleEnglishLevelSelection("")
+                                      : handleEnglishLevelSelection(level)
+                                  }
+                                >
+                                  <span>{level}</span>
+                                </button>
+                              )
+                            )}
                           </div>
                         </div>
 
