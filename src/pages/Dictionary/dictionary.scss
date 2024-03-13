@@ -226,7 +226,7 @@
   word-wrap: break-word;
   hyphens: auto;
   ul {
-    width: 250px;
+    width: 150px;
     max-height: 450px;
     &::-webkit-scrollbar {
       width: 10px;
@@ -258,18 +258,19 @@
     cursor: auto;
   }
   input {
+    width: 150px;
     display: inline-block;
-    border: 2px solid #01f816;
+    border: 2px solid #333;
     border-radius: 1ex;
-    padding: 5px 10px;
+    padding: 5px 5px;
     transition: 0.2s all ease;
     font-weight: 555;
     margin-bottom: 15px;
     &:focus {
-      outline: 2px solid #01f816;
+      outline: 2px solid #333;
     }
     &::placeholder {
-      font-weight: 555;
+      font-weight: 600;
       color: #222;
       opacity: 0.8;
     }
@@ -339,23 +340,48 @@
     color: aliceblue;
     cursor: auto;
   }
-  input {
-    display: inline-block;
-    border: 2px solid #01f816;
-    border-radius: 1ex;
-    padding: 5px 10px;
-    transition: 0.2s all ease;
-    font-weight: 555;
-    margin-bottom: 15px;
-    &:focus {
-      outline: 2px solid #01f816;
+  .s-favoriteWords {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+    button {
+      background: #ece8e73b;
+      color: #f12525;
+      border: none;
+      border-radius: 1ex;
+      * {
+        padding-top: 3px;
+      }
+      font-size: 14px;
+      margin-left: 5px;
+      cursor: pointer;
+      &:hover {
+        background-color: #f7e9e6ca;
+      }
     }
-    &::placeholder {
-      font-weight: 555;
-      color: #222;
-      opacity: 0.8;
+    input {
+      width: 220px;
+      display: inline-block;
+      border: 1px solid #1afd2de3;
+      border-radius: 1ex;
+      padding: 11px 10px;
+      transition: 0.2s all ease;
+      font-weight: 600;
+      margin-bottom: 15px;
+      font-family: "Poppins";
+      &:focus {
+        outline: 2px solid #d8dad89f;
+      }
+      &::placeholder {
+        font-weight: 600;
+        color: #222;
+        font-size: 16px;
+        opacity: 0.8;
+      }
     }
   }
+
   button {
     background: rgb(246, 164, 48);
     color: #eee;

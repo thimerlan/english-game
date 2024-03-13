@@ -5,17 +5,18 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { BsFillPlayFill } from "react-icons/bs";
-import { BiSolidBookBookmark, BiSolidBookmark } from "react-icons/bi";
 import axios from "axios";
-import "./dictionary.scss";
 import { useNavigate } from "react-router-dom";
+import AlertSignIn from "../../components/Alert/AlertSignIn";
 import useFavoriteWords from "../../hooks/useFavoriteWords/useFavoriteWords";
 import { auth, db } from "../../firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
 import { useAuthState } from "react-firebase-hooks/auth";
-import AlertSignIn from "../../components/Alert/AlertSignIn";
+import { IoCloseSharp } from "react-icons/io5";
+import { BsFillPlayFill } from "react-icons/bs";
+import { BiSolidBookBookmark, BiSolidBookmark } from "react-icons/bi";
 import { ClipLoader } from "react-spinners";
+import "./dictionary.scss";
 
 type typeErrorMessage = {
   message: string;
@@ -34,9 +35,9 @@ const Dictionary = () => {
   const [errorMessage, setErrorMessage] = useState<typeErrorMessage | null>();
   const dictionaryContainerRef = useRef<HTMLDivElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
-  const [rerunSearch, setRerunSearch] = useState<boolean>(false);
-  const [openFavorites, setOpenFavorites] = useState<boolean>(false);
-  const [searchFavoriteWord, setSearchFavoriteWord] = useState<string>("");
+  const [rerunSearch, setRerunSearch] = useState(false);
+  const [openFavorites, setOpenFavorites] = useState(false);
+  const [searchFavoriteWord, setSearchFavoriteWord] = useState("");
   const navigate = useNavigate();
   const [user] = useAuthState(auth); // GET USER INFO
 
@@ -71,6 +72,7 @@ const Dictionary = () => {
     }
     setSearchFavoriteWord("");
   }, [rerunSearch]);
+
   const filteredFavoriteWord = useCallback(() => {
     return favoriteWords.filter((fw) =>
       fw.toLocaleLowerCase().includes(searchFavoriteWord.toLocaleLowerCase())
@@ -155,14 +157,21 @@ const Dictionary = () => {
           &#10008;
         </button>
         {favoriteWords.length !== 0 && (
-          <input
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchFavoriteWord(e.target.value)
-            }
-            value={searchFavoriteWord}
-            type="text"
-            placeholder="search word:"
-          />
+          <div className="s-favoriteWords">
+            <input
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchFavoriteWord(e.target.value)
+              }
+              value={searchFavoriteWord}
+              type="text"
+              placeholder="search a favorite word:"
+            />
+            {searchFavoriteWord.length !== 0 && (
+              <button onClick={() => setSearchFavoriteWord("")}>
+                <IoCloseSharp size={25} />
+              </button>
+            )}
+          </div>
         )}
         <ul>
           {filteredFavoriteWord().length > 0
