@@ -1,6 +1,7 @@
 .dictionary {
+  margin-top: 50px;
   width: 100%;
-  height: 100vh;
+  height: 70vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -189,7 +190,7 @@
   &:hover {
     box-shadow: 0px 0px 5px 3px rgba(64, 59, 59, 0.437);
   }
-  transform: translateY(15px);
+  margin-top: 10px;
 }
 .addTofavorites {
   background-color: transparent;

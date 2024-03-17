@@ -38,9 +38,10 @@ const ChatList = ({ chatRoomId }: ChatListProps) => {
   }, [messages]);
   return (
     <div className="chat-list" ref={chatListRef}>
-      {messages?.map((message) => (
-        <div key={message.id} className="chat-message">
+      <div className="chat-message">
+        {messages?.map((message) => (
           <p
+            key={message.id}
             className={
               auth?.currentUser?.uid === message.uid
                 ? "myMessage"
@@ -49,8 +50,8 @@ const ChatList = ({ chatRoomId }: ChatListProps) => {
           >
             {message.message}
           </p>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

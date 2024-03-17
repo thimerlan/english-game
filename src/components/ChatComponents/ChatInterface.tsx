@@ -13,6 +13,7 @@ import {
   update,
 } from "firebase/database";
 import { PulseLoader } from "react-spinners";
+import { MdOutlineExitToApp } from "react-icons/md";
 import useEmojiAPI from "../../hooks/useEmojiApi/useEmojiApi";
 import "./Chat.scss";
 interface ChatInterfaceProps {
@@ -229,12 +230,13 @@ const ChatInterface = ({
       )}
       <div className="quitChat">
         <button
+          title="leave chat"
           onClick={() => {
             setShowFeedbackComponent(true);
             deleteCallRequestData();
           }}
         >
-          Leave chat
+          <MdOutlineExitToApp size={25} />
         </button>
       </div>
       <div className="callEmojisList">

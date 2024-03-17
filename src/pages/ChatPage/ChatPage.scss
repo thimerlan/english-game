@@ -19,6 +19,7 @@
     color: #ff4000;
     font-weight: 555;
     font-size: 20px;
+    padding: 3px;
   }
 }
 .navigationButtons {
@@ -53,12 +54,14 @@
     margin-left: 8px;
     font-size: 17px;
     transition: all ease 0.5s;
-
-    &:hover {
-      box-shadow: 0px 0px 3px 2px rgba(246, 98, 0, 0.72);
+    @media (hover: hover) {
+      &:hover {
+        box-shadow: 0px 0px 3px 2px rgba(246, 98, 0, 0.72);
+      }
     }
   }
 }
+
 .users {
   width: 20%;
   margin: 0 auto;
@@ -70,7 +73,7 @@
     border-radius: 1ex;
     padding: 4px;
     color: #ffffff;
-    font-weight: 555;
+    font-weight: 600;
     margin-bottom: 28px;
     background-color: rgb(250, 51, 6);
     display: flex;
@@ -80,11 +83,18 @@
     position: relative;
     transition: 0.3s all ease;
     font-size: 1.2rem;
-
-    &:hover {
-      transform: translate3d(-2px, 3px, 4px);
-      background-color: #1487bc;
+    .user-age-name {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
+    @media (hover: hover) {
+      &:hover {
+        transform: translate3d(-2px, 3px, 4px);
+        background-color: #1487bc;
+      }
+    }
+
     p.user-name {
       color: #f8fff3;
       text-align: center;
@@ -168,26 +178,95 @@
       top: -17px;
       font-size: 14px;
     }
-    button {
-      font-weight: 555;
-      background-color: #10ee00;
-      color: #fff;
-      font-family: "Belanosima";
-      padding: 4px 5px;
-      font-size: 17px;
-      border-radius: 1ex;
-      transition: 0.2s all ease;
-      &:hover {
-        cursor: pointer;
-        background-color: #11ff00;
-      }
-      &:disabled {
-        background-color: #4b3c40;
-        cursor: no-drop;
+    .invite-btn {
+      button {
+        font-weight: 555;
+        background-color: #10ee00;
+        color: #fff;
+        font-family: "Belanosima";
+        padding: 4px 5px;
+        font-size: 16px;
+        border-radius: 1ex;
+        transition: 0.2s all ease;
+        @media (hover: hover) {
+          &:hover {
+            cursor: pointer;
+            background-color: #11ff00;
+          }
+        }
+        &:disabled {
+          background-color: #4b3c40;
+          cursor: no-drop;
+        }
       }
     }
   }
 }
+@media (max-width: 1440px) {
+  .users {
+    width: 23%;
+    .invite-btn {
+      button {
+        margin: 5px !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 1320px) {
+  .users {
+    width: 25%;
+  }
+}
+@media (max-width: 1035px) {
+  .users {
+    width: 19%;
+    li {
+      flex-direction: column;
+      justify-content: space-between;
+      margin-bottom: 35px;
+      .user-age-name {
+        margin: 7px 0px;
+      }
+      .user-feedbacks {
+        top: -30px;
+        padding: 3px;
+      }
+    }
+  }
+}
+
+@media (max-width: 780px) {
+  .users {
+    width: 23%;
+  }
+}
+@media (max-width: 640px) {
+  .users {
+    margin-top: 55px;
+    width: 28%;
+  }
+  .filterUsersBy {
+    button.filter-button {
+      margin: 5px;
+    }
+  }
+  .show-selected-levels {
+    top: 150% !important;
+    left: 20% !important;
+  }
+}
+@media (max-width: 520px) {
+  .users {
+    width: 33%;
+  }
+}
+@media (max-width: 428px) {
+  .users {
+    width: 45%;
+  }
+}
+
 .no-results-found {
   color: #fff;
   font-size: 22px;
@@ -294,10 +373,12 @@
     font-weight: 555;
     color: #eee;
     transition: 0.3s all ease;
-    &:hover {
-      background-color: #00ff1a;
-      cursor: pointer;
-      box-shadow: 2px 1px 2px 3px #11ff00;
+    @media (hover: hover) {
+      &:hover {
+        background-color: #00ff1a;
+        cursor: pointer;
+        box-shadow: 2px 1px 2px 3px #11ff00;
+      }
     }
     &:disabled {
       background-color: #3a573d;
@@ -446,13 +527,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #1d1a1a;
+      background-color: #5a5a5a;
       z-index: 2;
       img {
         width: auto;
         height: 630px;
         cursor: zoom-out;
         border-radius: 1ex;
+        @media (max-width: 450px) {
+          height: 370px;
+        }
       }
     }
   }
@@ -494,6 +578,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
   p {
     font-weight: 555;
     color: #25fa97;
@@ -510,7 +595,6 @@
     margin-right: 7px;
     text-transform: capitalize;
     font-size: 15px;
-
     &:last-child {
       margin-right: 0px;
     }

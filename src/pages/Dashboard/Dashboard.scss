@@ -48,11 +48,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #1d1a1a;
+      background-color: #363434;
+      z-index: 3;
       img {
         width: auto;
         height: 650px;
         cursor: zoom-out;
+        @media (max-width: 450px) {
+          height: 360px;
+        }
       }
     }
   }

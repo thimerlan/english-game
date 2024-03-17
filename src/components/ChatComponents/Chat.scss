@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   bottom: 0;
-  padding-bottom: 20px;
+  padding: 10px 0px;
   input {
     font-family: "Poppins";
     width: 350px;
@@ -25,21 +25,46 @@
       box-shadow: 0px 0px 4px 4px rgba(244, 181, 6, 0.42);
     }
   }
+
   form button {
     cursor: pointer;
     border: none;
     background-color: transparent;
     font-size: 25px;
-    color: #15baf6;
-    // color: #f66b15;
+    color: #0abeff;
 
     transition: 0.2s all ease;
-    &:hover {
-      transform: scale(1.1);
+    @media (hover: hover) {
+      &:hover {
+        transform: scale(1.1);
+      }
     }
   }
 }
 
+@media (max-width: 676px) {
+  .chat-interface {
+    input {
+      width: 250px;
+      font-size: 16px;
+    }
+  }
+}
+
+@media (max-width: 470px) {
+  .chat-interface {
+    input {
+      width: 220px;
+      font-size: 14px;
+    }
+    bottom: -2%;
+  }
+  .quitChat {
+    button {
+      padding: 4px 1px 0px 1px !important;
+    }
+  }
+}
 // CHAT BODY:
 
 .chat-list {
@@ -65,10 +90,11 @@
   .chat-message {
     color: #fff;
     font-weight: 555;
-    margin-bottom: 2px;
+
     * {
       border-radius: 1ex;
       padding: 3.4px;
+      margin-bottom: 3.4px;
     }
     .myMessage {
       transform: translateX(255%) scale(1);
@@ -87,7 +113,244 @@
     }
   }
 }
+// !! BAD SCSS CODE CODE CODE, SOON WILL BE CHANGE (so dont worry...)
 
+@media (max-width: 1920px) {
+  .chat-list {
+    width: 48%;
+  }
+}
+@media (max-width: 1600px) {
+  .chat-list {
+    width: 57%;
+  }
+}
+@media (max-width: 1100px) {
+  .myMessage {
+    max-width: 235px !important;
+  }
+  .theirMessage {
+    max-width: 235px !important;
+  }
+}
+@media (max-width: 1000px) {
+  .myMessage {
+    max-width: 222px !important;
+  }
+  .theirMessage {
+    max-width: 222px !important;
+  }
+}
+
+@media (max-width: 973px) {
+  .myMessage {
+    max-width: 216px !important;
+  }
+  .theirMessage {
+    max-width: 216px !important;
+  }
+}
+
+@media (max-width: 827px) {
+  .myMessage {
+    max-width: 206px !important;
+  }
+  .theirMessage {
+    max-width: 206px !important;
+  }
+}
+
+@media (max-width: 775px) {
+  .myMessage {
+    max-width: 188px !important;
+  }
+  .theirMessage {
+    max-width: 188px !important;
+  }
+}
+
+@media (max-width: 690px) {
+  .myMessage {
+    max-width: 178px !important;
+    font-size: 14px;
+    transform: translateX(250%) scale(1) !important;
+  }
+  .theirMessage {
+    max-width: 178px !important;
+    font-size: 14px;
+    transform: translateX(20%) !important;
+  }
+}
+
+@media (max-width: 657px) {
+  .myMessage {
+    transform: translateX(240%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(10%) !important;
+  }
+}
+
+@media (max-width: 652px) {
+  .myMessage {
+    transform: translateX(230%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(7%) !important;
+  }
+}
+
+@media (max-width: 644px) {
+  .myMessage {
+    transform: translateX(220%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(7%) !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .myMessage {
+    transform: translateX(200%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(25%) !important;
+  }
+}
+
+@media (max-width: 552px) {
+  .myMessage {
+    transform: translateX(180%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(25%) !important;
+  }
+}
+
+@media (max-width: 515px) {
+  .myMessage {
+    transform: translateX(160%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(0%) !important;
+  }
+}
+
+@media (max-width: 500px) {
+  .myMessage {
+    max-width: 165px !important;
+  }
+  .theirMessage {
+    max-width: 165px !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .myMessage {
+    transform: translateX(150%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(20%) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .myMessage {
+    transform: translateX(120%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(0%) !important;
+  }
+}
+@media (max-width: 405px) {
+  .myMessage {
+    transform: translateX(106%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(0%) !important;
+  }
+}
+@media (max-width: 386px) {
+  .myMessage {
+    transform: translateX(80%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(0%) !important;
+  }
+}
+// Define a mixin to generate media queries
+@mixin responsive-width($max-width, $width) {
+  @media (max-width: $max-width) {
+    .chat-list {
+      width: $width;
+    }
+  }
+}
+
+// Define breakpoints and corresponding widths
+$breakpoints: (
+  1450px: 65%,
+  1396px: 67%,
+  1365px: 68%,
+  1330px: 69%,
+  1317px: 70%,
+  1297px: 71%,
+  1278px: 72%,
+  1263px: 73%,
+  1243px: 74%,
+  1229px: 75%,
+  1208px: 76%,
+  1182px: 77%,
+  1168px: 78%,
+  1152px: 79%,
+  1133px: 80%,
+  1107px: 82%,
+  1044px: 83%,
+  1028px: 84%,
+  1000px: 83%,
+  947px: 85%,
+  925px: 87%,
+  905px: 88%,
+  895px: 90%,
+  872px: 92%,
+  835px: 93%,
+  800px: 95%,
+  792px: 96%,
+  782px: 97%,
+  775px: 90%,
+  762px: 92%,
+  747px: 93%,
+  733px: 95%,
+  708px: 97%,
+  690px: 96%,
+  676px: 98%,
+  656px: 95%,
+  650px: 94%,
+  644px: 93%,
+  632px: 94%,
+  608px: 98%,
+  592px: 99%,
+  580px: 100%,
+  576px: 99%,
+  552px: 96%,
+  540px: 98%,
+  525px: 100%,
+  515px: 94%,
+  500px: 90%,
+  493px: 93%,
+  478px: 95%,
+  470px: 100%,
+  420px: 93%,
+  386px: 87%,
+  380px: 84%,
+  370px: 86%,
+);
+
+// Loop through breakpoints and generate media queries using mixin
+@each $max-width, $width in $breakpoints {
+  @include responsive-width($max-width, $width);
+}
+// !! BAD SCSS CODE CODE CODE SOON WILL BE CHANGE
 @keyframes enterAnewMessageMy {
   0% {
     opacity: 0;
@@ -130,7 +393,7 @@
     font-weight: 555;
     color: #eee;
     transition: 0.3s all ease;
-    font-size: 13px;
+    font-size: 15px;
     &:hover {
       background-color: #ff0000;
       cursor: pointer;
@@ -221,7 +484,16 @@
   background-color: rgba(30, 143, 255, 0.696);
   border-radius: 1ex;
   padding-top: 10px;
-
+  @media (max-width: 505px) {
+    max-width: 246px;
+    gap: 1px;
+  }
+  @media (max-width: 455px) {
+    max-width: 216px;
+    height: 250px;
+    gap: 0px;
+    bottom: 9%;
+  }
   &::-webkit-scrollbar {
     width: 13px;
     background-color: rgba(30, 169, 255, 0.715);
@@ -239,12 +511,18 @@
   padding: 5px;
   cursor: pointer;
   transition: 0.2s all ease-in;
+  &:active {
+    background-color: #e79107;
+    border-radius: 5px;
+    transform: scale(1.2);
+  }
 }
-
-.emoji:hover {
-  background-color: #e79107;
-  border-radius: 5px;
-  transform: scale(1.2);
+@media (hover: hover) {
+  .emoji:hover {
+    background-color: #e79107;
+    border-radius: 5px;
+    transform: scale(1.2);
+  }
 }
 //FEEDBACK STYLE
 .feedback-container {
@@ -275,21 +553,27 @@
     color: #fff;
     font-weight: 600;
     margin: 10px 0px;
+    text-align: center;
   }
   .emoji-options {
     width: 10%;
     display: flex;
     justify-content: space-between;
     margin: 25px 0px;
-
+    @media (max-width: 488px) {
+      width: 25%;
+    }
     button {
       font-size: 24px;
       background-color: #154df6e0;
       border-radius: 2ex;
       padding: 5px;
-      &:hover {
-        background-color: #c8c7c7;
-        transform: scale(1.1);
+      margin-right: 5px;
+      @media (hover: hover) {
+        &:hover {
+          background-color: #c8c7c7;
+          transform: scale(1.1);
+        }
       }
       &.isActive {
         background-color: #de6e06;

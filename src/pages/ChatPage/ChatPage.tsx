@@ -723,12 +723,12 @@ const ChatPage = () => {
                           ""
                         )}
                       </div>
-
-                      <p className="user-name"> {user.displayName}</p>
-
-                      <p className="user-age">
-                        {user.age ? "age: " + user.age : ""}
-                      </p>
+                      <div className="user-age-name">
+                        <p className="user-name"> {user.displayName}</p>
+                        <p className="user-age">
+                          {user.age ? "age: " + user.age : ""}
+                        </p>
+                      </div>
                       <p className="user-gender">
                         <span>
                           {user.gender === "male" ? (
@@ -760,33 +760,34 @@ const ChatPage = () => {
                           }
                         />
                       </span>
-
-                      <button
-                        title={
-                          user.status === "online"
-                            ? "This user is Online"
+                      <div className="invite-btn">
+                        <button
+                          title={
+                            user.status === "online"
+                              ? "This user is Online"
+                              : user.status === "chatting"
+                              ? "This user is Chatting already"
+                              : user.status === "ready"
+                              ? "This user is ready"
+                              : "This user is Offline"
+                          }
+                          onClick={() =>
+                            initiateCall(user.uid, user.displayName, user.photo)
+                          }
+                          disabled={
+                            user.status === "offline" ||
+                            user.status === "chatting"
+                          }
+                        >
+                          {user.status === "online"
+                            ? "Call"
                             : user.status === "chatting"
-                            ? "This user is Chatting already"
+                            ? "Chatting"
                             : user.status === "ready"
-                            ? "This user is ready"
-                            : "This user is Offline"
-                        }
-                        onClick={() =>
-                          initiateCall(user.uid, user.displayName, user.photo)
-                        }
-                        disabled={
-                          user.status === "offline" ||
-                          user.status === "chatting"
-                        }
-                      >
-                        {user.status === "online"
-                          ? "Call"
-                          : user.status === "chatting"
-                          ? "Chatting"
-                          : user.status === "ready"
-                          ? "Ready"
-                          : "Offline"}
-                      </button>
+                            ? "Ready"
+                            : "Offline"}
+                        </button>
+                      </div>
                     </li>
                   );
                 }
