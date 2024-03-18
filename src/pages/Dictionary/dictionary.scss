@@ -51,7 +51,9 @@
         transition: 0.3s all ease;
         font-family: "Poppins";
         outline: 1px solid rgba(244, 165, 96, 0.165);
-
+        @media (max-width: 450px) {
+          width: 50%;
+        }
         &:focus {
           outline: 1.5px solid sandybrown;
         }
