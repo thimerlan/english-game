@@ -464,7 +464,7 @@ const ChatPage = () => {
                     <div className="searching-ui-loading">
                       <SyncLoader color="#00b3ff" size={28} />
                     </div>
-                    <p>We are searching a parkner for you...</p>
+                    <p>We are searching a partner for you...</p>
                   </div>
                   <button
                     className="inactivate-readyToChat-btn"
