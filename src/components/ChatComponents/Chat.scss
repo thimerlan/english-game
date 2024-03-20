@@ -5,24 +5,43 @@
   justify-content: center;
   bottom: 0;
   padding: 10px 0px;
-  input {
-    font-family: "Poppins";
-    width: 350px;
-    padding: 8px 10px;
-    border-radius: 1ex;
-    background-color: #eee;
-    font-size: 17px;
-    font-weight: 555;
-    border: 1px solid gold;
-    outline: none;
-    color: #222;
-    transition: 0.4s all ease;
-    margin-right: 5px;
-    &:hover {
-      box-shadow: 0px 0px 10px 5px rgba(128, 128, 128, 0.474);
-    }
-    &:focus {
-      box-shadow: 0px 0px 4px 4px rgba(244, 181, 6, 0.42);
+  form {
+    padding-bottom: 12px;
+    textarea {
+      font-family: "Poppins";
+      resize: none;
+      width: 300px;
+      height: 45px;
+      max-height: 100px;
+      padding: 8px 10px;
+      border-radius: 1ex;
+      background-color: #eee;
+      font-size: 17px;
+      font-weight: 555;
+      border: 1px solid gold;
+      outline: none;
+      color: #222;
+      transition: 0.4s all ease;
+      margin-right: 5px;
+      &::-webkit-scrollbar {
+        width: 3px;
+        background-color: #b9bdc3;
+        border-radius: 1ex;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 1ex;
+        width: 2px;
+        background-color: #2880fa;
+      }
+      @media (max-width: 450px) {
+        width: 250px;
+      }
+      &:hover {
+        box-shadow: 0px 0px 10px 5px rgba(128, 128, 128, 0.474);
+      }
+      &:focus {
+        box-shadow: 0px 0px 4px 4px rgba(244, 181, 6, 0.42);
+      }
     }
   }
 
@@ -32,7 +51,10 @@
     background-color: transparent;
     font-size: 25px;
     color: #0abeff;
-
+    &:disabled {
+      color: #817a7a;
+      cursor: no-drop;
+    }
     transition: 0.2s all ease;
     @media (hover: hover) {
       &:hover {
@@ -100,15 +122,19 @@
       transform: translateX(255%) scale(1);
       opacity: 1;
       background-color: #15baf6;
-      max-width: 250px;
+      white-space: break-spaces;
       word-wrap: break-word;
+      word-break: break-all;
+      max-width: 250px;
       animation: enterAnewMessageMy 0.4s ease 0s 1;
     }
     .theirMessage {
       transform: translateX(0.6%);
       background-color: #f66b15;
       max-width: 270px;
+      white-space: break-spaces;
       word-wrap: break-word;
+      word-break: break-all;
       animation: enterAnewMessageTheir 0.4s ease 0s 1;
     }
   }
@@ -247,37 +273,37 @@
 
 @media (max-width: 450px) {
   .myMessage {
-    transform: translateX(150%) scale(1) !important;
+    transform: translateX(77%) scale(1) !important;
   }
   .theirMessage {
-    transform: translateX(20%) !important;
+    transform: translateX(37%) !important;
   }
 }
 
-@media (max-width: 420px) {
-  .myMessage {
-    transform: translateX(120%) scale(1) !important;
-  }
-  .theirMessage {
-    transform: translateX(0%) !important;
-  }
-}
-@media (max-width: 405px) {
-  .myMessage {
-    transform: translateX(106%) scale(1) !important;
-  }
-  .theirMessage {
-    transform: translateX(0%) !important;
-  }
-}
-@media (max-width: 386px) {
-  .myMessage {
-    transform: translateX(80%) scale(1) !important;
-  }
-  .theirMessage {
-    transform: translateX(0%) !important;
-  }
-}
+// @media (max-width: 420px) {
+//   .myMessage {
+//     transform: translateX(120%) scale(1) !important;
+//   }
+//   .theirMessage {
+//     transform: translateX(0%) !important;
+//   }
+// }
+// @media (max-width: 405px) {
+//   .myMessage {
+//     transform: translateX(106%) scale(1) !important;
+//   }
+//   .theirMessage {
+//     transform: translateX(0%) !important;
+//   }
+// }
+// @media (max-width: 386px) {
+//   .myMessage {
+//     transform: translateX(80%) scale(1) !important;
+//   }
+//   .theirMessage {
+//     transform: translateX(0%) !important;
+//   }
+// }
 // Define a mixin to generate media queries
 @mixin responsive-width($max-width, $width) {
   @media (max-width: $max-width) {
@@ -339,11 +365,11 @@ $breakpoints: (
   500px: 90%,
   493px: 93%,
   478px: 95%,
-  470px: 100%,
-  420px: 93%,
-  386px: 87%,
-  380px: 84%,
-  370px: 86%,
+  470px: 85%,
+  //   420px: 93%,
+  //   386px: 87%,
+  //   380px: 84%,
+  //   370px: 86%,,,,,,,
 );
 
 // Loop through breakpoints and generate media queries using mixin
@@ -457,6 +483,17 @@ $breakpoints: (
     img {
       vertical-align: top;
     }
+  }
+}
+
+@media (max-width: 450px) {
+  .callEmojisList {
+    display: none;
+  }
+  .callEmojisList,
+  .emojis-active,
+  .emojis-inactive {
+    display: none;
   }
 }
 .emojis-active {

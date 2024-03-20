@@ -39,14 +39,14 @@ const ChatInterface = ({
   const [showFeedbackComponent, setShowFeedbackComponent] = useState(false);
   const [chattingUserInfo, setChattingUserInfo] = useState<IChattingUserInfo>();
   const { emojis, loadingEmojis } = useEmojiAPI();
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const userUID = auth.currentUser?.uid;
 
   const handleSendMessage = async (
     e: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     e.preventDefault();
-
+    textareaRef.current?.focus();
     if (!chatRoomId) {
       alert("Chat room ID is not available.");
       return;
@@ -60,15 +60,12 @@ const ChatInterface = ({
     };
     if (message) {
       try {
-        await set(newMessageRef, newMessage);
         setMessage("");
-        inputRef.current?.focus();
+        await set(newMessageRef, newMessage);
+        // textareaRef.current?.focus();
       } catch (error) {
         console.error("Error sending message:", error);
       }
-    } else {
-      alert("Please enter a text!");
-      inputRef.current?.focus();
     }
   };
 
@@ -149,7 +146,7 @@ const ChatInterface = ({
   });
   const handleAddingEmoji = (emoji: string): void => {
     setMessage((prev) => prev + emoji);
-    inputRef.current?.focus();
+    textareaRef.current?.focus();
   };
   const handleGiveFeedback = async (): Promise<void> => {
     const userProfileRef = ref(dbChat, `userProfiles/${chattingUserInfo?.uid}`);
@@ -262,16 +259,15 @@ const ChatInterface = ({
         </div>
       </div>
       <form onSubmit={handleSendMessage}>
-        <input
-          type="text"
+        <textarea
           value={message}
-          ref={inputRef}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          ref={textareaRef}
+          onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setMessage(e.target.value)
           }
           placeholder="Type your message..."
         />
-        <button type="submit">
+        <button disabled={message.trim().length ? false : true} type="submit">
           <BiSolidSend />
         </button>
       </form>
