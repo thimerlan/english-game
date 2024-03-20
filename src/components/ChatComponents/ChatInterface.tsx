@@ -62,7 +62,6 @@ const ChatInterface = ({
       try {
         setMessage("");
         await set(newMessageRef, newMessage);
-        // textareaRef.current?.focus();
       } catch (error) {
         console.error("Error sending message:", error);
       }

@@ -1,12 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 const useEmojiAPI = () => {
   const [emojis, setEmojis] = useState<Emoji[]>();
   const [loadingEmojis, setLoadingEmojis] = useState(true);
 
   useEffect(() => {
+    const isMobileDevice = () => {
+      return /Mobi|Android/i.test(navigator.userAgent);
+    };
+
     const fetchEmojis = async () => {
       try {
+        if (isMobileDevice()) {
+          setLoadingEmojis(false);
+          return;
+        }
+
         const response = await axios.get<Emoji[]>(
           "https://emoji-api.com/emojis?access_key=d919239a0302dbe84fd9d72b692602bc26588c9d"
         );

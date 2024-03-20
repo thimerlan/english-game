@@ -14,6 +14,7 @@
       height: 45px;
       max-height: 100px;
       padding: 8px 10px;
+      margin-left: 8px;
       border-radius: 1ex;
       background-color: #eee;
       font-size: 17px;
@@ -122,7 +123,7 @@
       transform: translateX(255%) scale(1);
       opacity: 1;
       background-color: #15baf6;
-      white-space: break-spaces;
+      white-space: pre-wrap;
       word-wrap: break-word;
       word-break: break-all;
       max-width: 250px;
@@ -132,7 +133,7 @@
       transform: translateX(0.6%);
       background-color: #f66b15;
       max-width: 270px;
-      white-space: break-spaces;
+      white-space: pre-wrap;
       word-wrap: break-word;
       word-break: break-all;
       animation: enterAnewMessageTheir 0.4s ease 0s 1;
@@ -279,31 +280,15 @@
     transform: translateX(37%) !important;
   }
 }
+@media (max-width: 386px) {
+  .myMessage {
+    transform: translateX(69%) scale(1) !important;
+  }
+  .theirMessage {
+    transform: translateX(8%) !important;
+  }
+}
 
-// @media (max-width: 420px) {
-//   .myMessage {
-//     transform: translateX(120%) scale(1) !important;
-//   }
-//   .theirMessage {
-//     transform: translateX(0%) !important;
-//   }
-// }
-// @media (max-width: 405px) {
-//   .myMessage {
-//     transform: translateX(106%) scale(1) !important;
-//   }
-//   .theirMessage {
-//     transform: translateX(0%) !important;
-//   }
-// }
-// @media (max-width: 386px) {
-//   .myMessage {
-//     transform: translateX(80%) scale(1) !important;
-//   }
-//   .theirMessage {
-//     transform: translateX(0%) !important;
-//   }
-// }
 // Define a mixin to generate media queries
 @mixin responsive-width($max-width, $width) {
   @media (max-width: $max-width) {
@@ -366,10 +351,6 @@ $breakpoints: (
   493px: 93%,
   478px: 95%,
   470px: 85%,
-  //   420px: 93%,
-  //   386px: 87%,
-  //   380px: 84%,
-  //   370px: 86%,,,,,,,
 );
 
 // Loop through breakpoints and generate media queries using mixin
