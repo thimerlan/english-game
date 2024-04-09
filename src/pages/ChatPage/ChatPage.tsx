@@ -32,10 +32,12 @@ const ChatPage = () => {
   const [senderUserInfo, setSenderUserInfo] = useState<IUserInfo>({
     username: "",
     userphoto: "",
+    autoCancelTimer: 0,
   });
   const [recipientUserInfo, setRecipientUserInfo] = useState<IUserInfo>({
     username: "",
     userphoto: "",
+    autoCancelTimer: 0,
   });
   const [recipientStatus, setRecipientStatus] = useState("");
   const [pendingCallRequests, setPendingCallRequests] = useState<
@@ -105,6 +107,7 @@ const ChatPage = () => {
       recipient: recipientUID || "",
       status: "pending",
       chatRoomId: newChatRoomId,
+      autoCancelTimer: 30,
     };
 
     push(callRequestRef, newCallRequest);
@@ -112,10 +115,68 @@ const ChatPage = () => {
     setRecipientUserInfo({
       userphoto: userPhoto || "",
       username: recipientUserName || "",
+      autoCancelTimer: 30,
     });
 
     setChatRoomIdForSender();
   };
+
+  //!!TESTING STILL NEEDS TO IMPROVE
+  useEffect(() => {
+    let time = recipientUserInfo.autoCancelTimer;
+    let timeInterval = setInterval(() => {
+      if (recipientUserInfo.username && time > 0) {
+        setRecipientUserInfo((prevRecipientUserInfo) => {
+          const newTime = prevRecipientUserInfo.autoCancelTimer - 1;
+          if (newTime === 0) {
+            clearInterval(timeInterval);
+            handleCancelCallForRecipient();
+          }
+          return {
+            ...prevRecipientUserInfo,
+            autoCancelTimer: newTime,
+          };
+        });
+      } else {
+        clearInterval(timeInterval);
+      }
+    }, 1000);
+
+    if (chatRoomId) {
+      clearInterval(timeInterval);
+    }
+
+    return () => clearInterval(timeInterval);
+  }, [recipientUserInfo, chatRoomId]);
+
+  useEffect(() => {
+    pendingCallRequests.length > 0 &&
+      pendingCallRequests.forEach((user) => {
+        let time = user.autoCancelTimer;
+        const timeInterval = setInterval(() => {
+          if (user.senderName && user.autoCancelTimer > 0) {
+            time -= 1;
+
+            setPendingCallRequests((prevPendingCallRequests) => {
+              return prevPendingCallRequests.map((prevUser) => {
+                if (prevUser.key === user.key) {
+                  return { ...prevUser, autoCancelTimer: time };
+                }
+                return prevUser;
+              });
+            });
+
+            if (time === 0) {
+              clearInterval(timeInterval);
+            }
+          } else {
+            clearInterval(timeInterval);
+          }
+        }, 1000);
+      });
+  }, [pendingCallRequests.length]);
+
+  //!!TESTING STILL NEEDS TO IMPROVE
 
   const handleStatusEmptyForRecipient = (): void => {
     setRecipientStatus("");
@@ -149,6 +210,7 @@ const ChatPage = () => {
         setSenderUserInfo({
           username: acceptedCall.senderName,
           userphoto: acceptedCall.senderPhoto,
+          autoCancelTimer: acceptedCall.autoCancelTimer,
         });
       }
 
@@ -220,14 +282,22 @@ const ChatPage = () => {
             callRequest.sender === userUID &&
             callRequest.status === "rejected"
           ) {
-            setRecipientUserInfo({ username: "", userphoto: "" });
+            setRecipientUserInfo({
+              username: "",
+              userphoto: "",
+              autoCancelTimer: 0,
+            });
           }
           const userIsSender = Object.values(callRequests).find(
             (callRequest: any) => callRequest.sender === userUID
           );
 
           if (!userIsSender) {
-            setRecipientUserInfo({ username: "", userphoto: "" });
+            setRecipientUserInfo({
+              username: "",
+              userphoto: "",
+              autoCancelTimer: 0,
+            });
           }
         }
       });
@@ -257,6 +327,7 @@ const ChatPage = () => {
               const newPendingCall = {
                 senderName: callRequest.senderName,
                 senderPhoto: callRequest.senderPhoto,
+                autoCancelTimer: callRequest.autoCancelTimer,
                 status: callRequest.status,
                 key: callRequestKey,
               };
@@ -283,7 +354,11 @@ const ChatPage = () => {
         }
         if (callRequest.sender === userUID && recipientStatus === "rejected") {
           rejectCall(callRequestKey);
-          setRecipientUserInfo({ username: "", userphoto: "" });
+          setRecipientUserInfo({
+            username: "",
+            userphoto: "",
+            autoCancelTimer: 0,
+          });
         }
       }
     };
@@ -818,6 +893,32 @@ const ChatPage = () => {
                 <div className="recipientUser-photo">
                   <img src={recipientUserInfo.userphoto} alt="user photo" />
                 </div>
+                <div
+                  className="autoCancelTheCallTimer"
+                  style={{
+                    backgroundColor: `${
+                      recipientUserInfo.autoCancelTimer < 10
+                        ? "#3c3b32"
+                        : "#d60404"
+                    }  `,
+                  }}
+                >
+                  <span>
+                    {recipientUserInfo.autoCancelTimer}
+                    <span
+                      style={{
+                        width: `${
+                          (recipientUserInfo.autoCancelTimer / 30) * 100
+                        }%`,
+                        backgroundColor: `${
+                          recipientUserInfo.autoCancelTimer < 10
+                            ? "#d60404"
+                            : "#ffe100"
+                        }  `,
+                      }}
+                    ></span>
+                  </span>
+                </div>
                 <h4>{recipientUserInfo.username}</h4>
                 <button
                   className="cancel-button"
@@ -847,6 +948,28 @@ const ChatPage = () => {
                       )}
                       <div className="senderUser-photo">
                         <img src={user.senderPhoto} alt="user photo" />
+                      </div>
+                      <div
+                        className="autoCancelTheCallTimer"
+                        style={{
+                          backgroundColor: `${
+                            user.autoCancelTimer < 10 ? "#3c3b32" : "#d60404"
+                          }  `,
+                        }}
+                      >
+                        <span>
+                          {user.autoCancelTimer}
+                          <span
+                            style={{
+                              width: `${(user.autoCancelTimer / 30) * 100}%`,
+                              backgroundColor: `${
+                                user.autoCancelTimer < 10
+                                  ? "#d60404"
+                                  : "#ffe100"
+                              }  `,
+                            }}
+                          ></span>
+                        </span>
                       </div>
                       <h4>{user.senderName}</h4>
                       <div className="senderUserNotice-content-buttons">

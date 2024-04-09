@@ -70,8 +70,8 @@ const ChatInterface = ({
 
   const deleteCallRequestData = async () => {
     const callRequestRef = ref(dbChat, "callRequests");
-    setSenderUserInfo({ username: "", userphoto: "" });
-    setRecipientUserInfo({ username: "", userphoto: "" });
+    setSenderUserInfo({ username: "", userphoto: "", autoCancelTimer: 0 });
+    setRecipientUserInfo({ username: "", userphoto: "", autoCancelTimer: 0 });
 
     try {
       const snapshot = await get(callRequestRef);

@@ -478,7 +478,27 @@
     box-shadow: 2px 1px 2px 3px #fa7025;
   }
 }
+.autoCancelTheCallTimer {
+  transform: translateX(150px) translateY(-80px);
+  padding: 3px 9px;
+  border-radius: 0.6ex;
 
+  span {
+    position: relative;
+    font-family: "Belanosima";
+    font-size: 19px;
+    span {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 0%;
+      height: 5px;
+      transition: all 0.4s ease-in;
+      border-radius: 0.1ex;
+    }
+    color: #fff;
+  }
+}
 @keyframes enterNoticeAnimate {
   0% {
     opacity: 0;

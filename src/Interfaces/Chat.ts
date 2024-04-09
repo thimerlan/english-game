@@ -24,6 +24,7 @@ interface IChattingUserInfo {
 interface IUserInfo {
   username: string;
   userphoto: string;
+  autoCancelTimer: number;
 }
 interface ICallRequest {
   sender: string;
@@ -32,10 +33,12 @@ interface ICallRequest {
   recipient: string;
   status: string;
   chatRoomId: string;
+  autoCancelTimer: number;
 }
 interface IPendingCallRequestInfo {
   senderName: string;
   senderPhoto: string;
+  autoCancelTimer: number;
   status: string;
   key: string;
 }
