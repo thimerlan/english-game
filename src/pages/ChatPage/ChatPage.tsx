@@ -121,7 +121,6 @@ const ChatPage = () => {
     setChatRoomIdForSender();
   };
 
-  //!!TESTING STILL NEEDS TO IMPROVE
   useEffect(() => {
     let time = recipientUserInfo.autoCancelTimer;
     let timeInterval = setInterval(() => {
@@ -150,40 +149,40 @@ const ChatPage = () => {
   }, [recipientUserInfo, chatRoomId]);
 
   useEffect(() => {
-    pendingCallRequests.length > 0 &&
+    const timeInterval = setInterval(() => {
       pendingCallRequests.forEach((user) => {
         let time = user.autoCancelTimer;
-        const timeInterval = setInterval(() => {
-          if (user.senderName && user.autoCancelTimer > 0) {
-            time -= 1;
+        if (user.senderName && time > 0) {
+          time -= 1;
 
-            setPendingCallRequests((prevPendingCallRequests) => {
-              return prevPendingCallRequests.map((prevUser) => {
-                if (prevUser.key === user.key) {
-                  return { ...prevUser, autoCancelTimer: time };
-                }
-                return prevUser;
-              });
+          setPendingCallRequests((prevPendingCallRequests) => {
+            return prevPendingCallRequests.map((prevUser) => {
+              if (prevUser.key === user.key) {
+                return { ...prevUser, autoCancelTimer: time };
+              }
+              return prevUser;
             });
-
-            if (time === 0) {
-              clearInterval(timeInterval);
-            }
-          } else {
+          });
+          if (time === 0) {
             clearInterval(timeInterval);
           }
-        }, 1000);
+        } else {
+          clearInterval(timeInterval);
+        }
       });
-  }, [pendingCallRequests.length]);
+    }, 1000);
 
-  //!!TESTING STILL NEEDS TO IMPROVE
+    return () => clearInterval(timeInterval);
+  }, [pendingCallRequests]);
 
   const handleStatusEmptyForRecipient = (): void => {
     setRecipientStatus("");
   };
+
   const handleCancelCallForRecipient = (): void => {
     setRecipientStatus("rejected");
   };
+
   const acceptCall = async (callRequestKey: string): Promise<void> => {
     const callRequestRef = ref(dbChat, `callRequests/${callRequestKey}`);
 
