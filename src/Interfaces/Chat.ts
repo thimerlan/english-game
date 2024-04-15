@@ -25,6 +25,7 @@ interface IUserInfo {
   username: string;
   userphoto: string;
   autoCancelTimer: number;
+  callRequestKey: string;
 }
 interface ICallRequest {
   sender: string;
@@ -34,6 +35,8 @@ interface ICallRequest {
   status: string;
   chatRoomId: string;
   autoCancelTimer: number;
+  senderIsTyping: boolean;
+  recipientIsTyping: boolean;
 }
 interface IPendingCallRequestInfo {
   senderName: string;

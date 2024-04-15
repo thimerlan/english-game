@@ -568,6 +568,62 @@
       font-weight: 600;
     }
   }
+
+  @keyframes showingText {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes dotting {
+    0% {
+      content: "•";
+    }
+    50% {
+      content: "• •";
+    }
+
+    100% {
+      content: "• • •";
+    }
+  }
+
+  .isTyping span::after {
+    content: "• • •";
+    margin-left: 9px;
+    width: 30px;
+    display: inline-block;
+    animation: dotting 2s infinite;
+    font-size: 10px;
+    color: rgba(255, 42, 0, 0.933);
+  }
+
+  .isTyping {
+    span {
+      display: inline-block;
+      width: auto;
+      background-color: #5e8484;
+      color: #fff;
+      font-size: 15px;
+      border-radius: 1ex;
+      font-weight: 600;
+      font-family: "Belanosima";
+      padding: 4px;
+      opacity: 0;
+    }
+    span.isTyping-active {
+      animation: showingText 0.5s ease-in;
+      opacity: 1;
+    }
+  }
 }
 .alertSignIn {
   p {

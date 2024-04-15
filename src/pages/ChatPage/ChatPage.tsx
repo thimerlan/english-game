@@ -33,12 +33,20 @@ const ChatPage = () => {
     username: "",
     userphoto: "",
     autoCancelTimer: 0,
+    callRequestKey: "",
   });
+  const [senderIsTyping, setSenderIsTyping] = useState(false);
+  const [sender, setSender] = useState("");
+
   const [recipientUserInfo, setRecipientUserInfo] = useState<IUserInfo>({
     username: "",
     userphoto: "",
     autoCancelTimer: 0,
+    callRequestKey: "",
   });
+  const [recipient, setRecipient] = useState("");
+  const [recipientIsTyping, setRecipientIsTyping] = useState(false);
+
   const [recipientStatus, setRecipientStatus] = useState("");
   const [pendingCallRequests, setPendingCallRequests] = useState<
     IPendingCallRequestInfo[]
@@ -56,6 +64,7 @@ const ChatPage = () => {
   const [readyToChat, setReadyToChat] = useState(false);
   const [userProfilesLoading, setUserProfilesLoading] = useState(true);
   const [isAvatarZoomed, setIsAvatarZoomed] = useState(false);
+
   useEffect(() => {
     const userProfilesRef = ref(dbChat, "userProfiles");
     const userUID = auth?.currentUser?.uid;
@@ -108,6 +117,8 @@ const ChatPage = () => {
       status: "pending",
       chatRoomId: newChatRoomId,
       autoCancelTimer: 30,
+      senderIsTyping: false,
+      recipientIsTyping: false,
     };
 
     push(callRequestRef, newCallRequest);
@@ -116,6 +127,7 @@ const ChatPage = () => {
       userphoto: userPhoto || "",
       username: recipientUserName || "",
       autoCancelTimer: 30,
+      callRequestKey: "",
     });
 
     setChatRoomIdForSender();
@@ -210,6 +222,7 @@ const ChatPage = () => {
           username: acceptedCall.senderName,
           userphoto: acceptedCall.senderPhoto,
           autoCancelTimer: acceptedCall.autoCancelTimer,
+          callRequestKey,
         });
       }
 
@@ -276,6 +289,11 @@ const ChatPage = () => {
             callRequest.status === "accepted"
           ) {
             setChatRoomId(callRequest.chatRoomId);
+
+            setRecipientUserInfo((recipientPrevUserInfo) => ({
+              ...recipientPrevUserInfo,
+              callRequestKey: callRequestKey,
+            }));
           }
           if (
             callRequest.sender === userUID &&
@@ -285,6 +303,7 @@ const ChatPage = () => {
               username: "",
               userphoto: "",
               autoCancelTimer: 0,
+              callRequestKey: "",
             });
           }
           const userIsSender = Object.values(callRequests).find(
@@ -296,6 +315,7 @@ const ChatPage = () => {
               username: "",
               userphoto: "",
               autoCancelTimer: 0,
+              callRequestKey: "",
             });
           }
         }
@@ -357,6 +377,7 @@ const ChatPage = () => {
             username: "",
             userphoto: "",
             autoCancelTimer: 0,
+            callRequestKey: "",
           });
         }
       }
@@ -745,6 +766,17 @@ const ChatPage = () => {
               <p>
                 You're chatting to <span>{senderUserInfo.username}</span>
               </p>
+              <div className="isTyping">
+                <span
+                  className={`${
+                    auth.currentUser.uid !== sender && senderIsTyping
+                      ? "isTyping-active"
+                      : ""
+                  }`}
+                >
+                  Typing
+                </span>
+              </div>
             </>
           )}
         </div>
@@ -773,6 +805,18 @@ const ChatPage = () => {
               <p>
                 You're chatting to <span>{recipientUserInfo.username}</span>
               </p>
+
+              <div className="isTyping">
+                <span
+                  className={`${
+                    auth.currentUser.uid !== recipient && recipientIsTyping
+                      ? "isTyping-active"
+                      : ""
+                  }`}
+                >
+                  Typing
+                </span>
+              </div>
             </>
           )}
         </div>
@@ -1003,6 +1047,10 @@ const ChatPage = () => {
               recipientUserInfo={recipientUserInfo}
               setSenderUserInfo={setSenderUserInfo}
               setRecipientUserInfo={setRecipientUserInfo}
+              setSender={setSender}
+              setRecipient={setRecipient}
+              setSenderIsTyping={setSenderIsTyping}
+              setRecipientIsTyping={setRecipientIsTyping}
             />
           </>
         )}

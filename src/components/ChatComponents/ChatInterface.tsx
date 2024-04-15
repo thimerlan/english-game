@@ -23,6 +23,10 @@ interface ChatInterfaceProps {
   recipientUserInfo: IUserInfo;
   setSenderUserInfo: (senderUserInfo: IUserInfo) => void;
   setRecipientUserInfo: (recipientUserInfo: IUserInfo) => void;
+  setSender: (sender: string) => void;
+  setRecipient: (recipient: string) => void;
+  setSenderIsTyping: (senderIsTyping: boolean) => void;
+  setRecipientIsTyping: (setRecipientIsTyping: boolean) => void;
 }
 
 const ChatInterface = ({
@@ -32,6 +36,10 @@ const ChatInterface = ({
   recipientUserInfo,
   setSenderUserInfo,
   setRecipientUserInfo,
+  setSender,
+  setRecipient,
+  setSenderIsTyping,
+  setRecipientIsTyping,
 }: ChatInterfaceProps) => {
   const [message, setMessage] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
@@ -41,6 +49,74 @@ const ChatInterface = ({
   const { emojis, loadingEmojis } = useEmojiAPI();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const userUID = auth.currentUser?.uid;
+
+  useEffect(() => {
+    const callRequestKey =
+      senderUserInfo.callRequestKey || recipientUserInfo.callRequestKey;
+
+    if (!callRequestKey) {
+      return;
+    }
+
+    const callRequestRef = ref(dbChat, `callRequests/${callRequestKey}`);
+
+    const callback = (snapshot: DataSnapshot) => {
+      const callRequestData = snapshot.val();
+
+      if (!callRequestData) {
+        return;
+      }
+
+      const { sender, recipient, senderIsTyping, recipientIsTyping } =
+        callRequestData;
+
+      setSender(sender);
+      setRecipient(recipient);
+
+      if (senderIsTyping) {
+        setSenderIsTyping(true);
+      } else {
+        setSenderIsTyping(false);
+      }
+
+      if (recipientIsTyping) {
+        setRecipientIsTyping(true);
+      } else {
+        setRecipientIsTyping(false);
+      }
+
+      if (message.length > 0 && sender === userUID) {
+        update(callRequestRef, {
+          senderIsTyping: true,
+        });
+      }
+
+      if (message.length > 0 && recipient === userUID) {
+        update(callRequestRef, {
+          recipientIsTyping: true,
+        });
+      }
+    };
+
+    const unsubscribe = onValue(callRequestRef, callback);
+
+    const resetTypingStatus = setTimeout(() => {
+      if (message.length === 0) {
+        update(callRequestRef, {
+          senderIsTyping: false,
+          recipientIsTyping: false,
+        });
+        setSenderIsTyping(false);
+        setRecipientIsTyping(false);
+      }
+    }, 300);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(resetTypingStatus);
+    };
+    // TODO: there is a bug when both users type and the message length is equal to zero ( here means that user sent or cleaned) then for user 'typing...' text is lost for a moment
+  }, [message.length, chatRoomId]);
 
   const handleSendMessage = async (
     e: React.FormEvent<HTMLFormElement>
@@ -70,8 +146,18 @@ const ChatInterface = ({
 
   const deleteCallRequestData = async () => {
     const callRequestRef = ref(dbChat, "callRequests");
-    setSenderUserInfo({ username: "", userphoto: "", autoCancelTimer: 0 });
-    setRecipientUserInfo({ username: "", userphoto: "", autoCancelTimer: 0 });
+    setSenderUserInfo({
+      username: "",
+      userphoto: "",
+      autoCancelTimer: 0,
+      callRequestKey: "",
+    });
+    setRecipientUserInfo({
+      username: "",
+      userphoto: "",
+      autoCancelTimer: 0,
+      callRequestKey: "",
+    });
 
     try {
       const snapshot = await get(callRequestRef);
