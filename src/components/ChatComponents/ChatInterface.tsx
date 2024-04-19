@@ -91,31 +91,30 @@ const ChatInterface = ({
         });
       }
 
+      if (message.length === 0 && sender === userUID) {
+        update(callRequestRef, {
+          senderIsTyping: false,
+        });
+      }
+
       if (message.length > 0 && recipient === userUID) {
         update(callRequestRef, {
           recipientIsTyping: true,
+        });
+      }
+
+      if (message.length === 0 && recipient === userUID) {
+        update(callRequestRef, {
+          recipientIsTyping: false,
         });
       }
     };
 
     const unsubscribe = onValue(callRequestRef, callback);
 
-    const resetTypingStatus = setTimeout(() => {
-      if (message.length === 0) {
-        update(callRequestRef, {
-          senderIsTyping: false,
-          recipientIsTyping: false,
-        });
-        setSenderIsTyping(false);
-        setRecipientIsTyping(false);
-      }
-    }, 300);
-
     return () => {
       unsubscribe();
-      clearTimeout(resetTypingStatus);
     };
-    // TODO: there is a bug when both users type and the message length is equal to zero ( here means that user sent or cleaned) then for user 'typing...' text is lost for a moment
   }, [message.length, chatRoomId]);
 
   const handleSendMessage = async (
@@ -130,7 +129,7 @@ const ChatInterface = ({
 
     const newMessageRef = push(ref(dbChat, `chatRooms/${chatRoomId}`));
     const newMessage: Messages = {
-      uid: auth.currentUser?.uid,
+      uid: userUID,
       id: newMessageRef.key!,
       message,
     };
@@ -224,7 +223,7 @@ const ChatInterface = ({
     return () => {
       unsubscribe();
     };
-  }, [auth.currentUser?.uid]);
+  }, [userUID]);
 
   window.addEventListener("beforeunload", () => {
     deleteCallRequestData();
@@ -345,6 +344,7 @@ const ChatInterface = ({
       </div>
       <form onSubmit={handleSendMessage}>
         <textarea
+          name="messageInput"
           value={message}
           ref={textareaRef}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>

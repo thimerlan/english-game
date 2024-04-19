@@ -65,6 +65,8 @@ const ChatPage = () => {
   const [userProfilesLoading, setUserProfilesLoading] = useState(true);
   const [isAvatarZoomed, setIsAvatarZoomed] = useState(false);
 
+  const userUID = auth.currentUser?.uid;
+
   useEffect(() => {
     const userProfilesRef = ref(dbChat, "userProfiles");
     const userUID = auth?.currentUser?.uid;
@@ -96,7 +98,7 @@ const ChatPage = () => {
           status: "offline",
         });
     };
-  }, [chatRoomId, auth.currentUser?.uid]);
+  }, [chatRoomId, userUID]);
 
   const initiateCall = (
     recipientUID: string,
@@ -104,10 +106,10 @@ const ChatPage = () => {
     userPhoto: string
   ): void => {
     const callRequestRef = ref(dbChat, "callRequests");
-    const senderUID = auth.currentUser?.uid;
+    const senderUID = userUID;
     const newChatRoomId = generateChatRoomId(senderUID || "", recipientUID);
     const currentUserProfile = Object.values(userProfiles).find(
-      (user) => user.uid === auth.currentUser?.uid
+      (user) => user.uid === userUID
     );
     const newCallRequest: ICallRequest = {
       senderName: currentUserProfile?.displayName || "",
@@ -273,8 +275,6 @@ const ChatPage = () => {
     return chatRoomId;
   }
   const setChatRoomIdForSender = async (): Promise<void> => {
-    const userUID = auth.currentUser?.uid;
-
     const callRequestRef = ref(dbChat, `callRequests`);
 
     try {
@@ -327,8 +327,6 @@ const ChatPage = () => {
 
   useEffect(() => {
     const callRequestRef = ref(dbChat, "callRequests");
-    const userUID = auth.currentUser?.uid;
-
     const callback = (snapshot: DataSnapshot) => {
       const callRequests = snapshot.val();
       for (const callRequestKey in callRequests) {
@@ -388,7 +386,7 @@ const ChatPage = () => {
     return () => {
       unsubscribe();
     };
-  }, [recipientStatus, auth.currentUser?.uid]);
+  }, [recipientStatus, userUID]);
 
   window.addEventListener("beforeunload", function () {
     handleCleanup();
@@ -405,7 +403,7 @@ const ChatPage = () => {
   };
 
   const filteredUsers = Object.values(userProfiles).filter((user) => {
-    const isCurrentUser = user.uid === auth.currentUser?.uid;
+    const isCurrentUser = user.uid === userUID;
 
     if (isCurrentUser) {
       return false;
@@ -459,7 +457,6 @@ const ChatPage = () => {
 
   useEffect(() => {
     const userProfilesRef = ref(dbChat, "userProfiles");
-    const userUID = auth.currentUser?.uid;
 
     if (readyToChat && pendingCallRequests.length > 0) {
       const firstPendingRequest = pendingCallRequests[0];
@@ -769,9 +766,9 @@ const ChatPage = () => {
               <div className="isTyping">
                 <span
                   className={`${
-                    auth.currentUser.uid !== sender && senderIsTyping
+                    userUID !== sender && senderIsTyping
                       ? "isTyping-active"
-                      : ""
+                      : "isTyping-inactive"
                   }`}
                 >
                   Typing
@@ -809,9 +806,9 @@ const ChatPage = () => {
               <div className="isTyping">
                 <span
                   className={`${
-                    auth.currentUser.uid !== recipient && recipientIsTyping
+                    userUID !== recipient && recipientIsTyping
                       ? "isTyping-active"
-                      : ""
+                      : "isTyping-inactive"
                   }`}
                 >
                   Typing
@@ -828,7 +825,7 @@ const ChatPage = () => {
               </p>
             ) : filteredUsers.length > 0 ? (
               filteredUsers?.map((user) => {
-                if (user.uid !== auth.currentUser?.uid) {
+                if (user.uid !== userUID) {
                   return (
                     <li key={user.uid}>
                       <div className="userPhoto-container">

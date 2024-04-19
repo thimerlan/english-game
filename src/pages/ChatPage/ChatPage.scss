@@ -583,6 +583,21 @@
       opacity: 1;
     }
   }
+
+  @keyframes hidingText {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(0.5);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
   @keyframes dotting {
     0% {
       content: "•";
@@ -618,10 +633,16 @@
       font-family: "Belanosima";
       padding: 4px;
       opacity: 0;
+      transition: 0.3s all ease;
     }
     span.isTyping-active {
       animation: showingText 0.5s ease-in;
       opacity: 1;
+    }
+    span.isTyping-inactive {
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.3);
     }
   }
 }
