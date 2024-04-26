@@ -20,11 +20,13 @@ import ChatInterface from "../../components/ChatComponents/ChatInterface";
 import ChatList from "../../components/ChatComponents/ChatList";
 import useChat from "../../hooks/useChat/useChat";
 import SignIn from "../../Auth/SignIn/SignIn";
+import useAudio from "../../hooks/useAudio/useAudio";
 
 import "./ChatPage.scss";
 
 const ChatPage = () => {
   const { userProfiles, setUserProfiles } = useChat();
+  const { play: playReceiveCallSound } = useAudio("/havingCallSound.mp3");
 
   const navigate = useNavigate();
 
@@ -335,6 +337,8 @@ const ChatPage = () => {
           callRequest.recipient === userUID &&
           callRequest.status === "pending"
         ) {
+          playReceiveCallSound();
+
           setPendingCallRequests((prevPendingCallRequests) => {
             const exists = prevPendingCallRequests.some(
               (pendingCall) => pendingCall.key === callRequestKey

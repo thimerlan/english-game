@@ -15,7 +15,10 @@ import {
 import { PulseLoader } from "react-spinners";
 import { MdOutlineExitToApp } from "react-icons/md";
 import useEmojiAPI from "../../hooks/useEmojiApi/useEmojiApi";
+import useAudio from "../../hooks/useAudio/useAudio";
+
 import "./Chat.scss";
+
 interface ChatInterfaceProps {
   chatRoomId: string;
   setChatRoomId: (chatRoomId: string) => void;
@@ -48,6 +51,8 @@ const ChatInterface = ({
   const [chattingUserInfo, setChattingUserInfo] = useState<IChattingUserInfo>();
   const { emojis, loadingEmojis } = useEmojiAPI();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const { play: playSendMessageSound } = useAudio("/sendingMessageSound.mp3");
+
   const userUID = auth.currentUser?.uid;
 
   useEffect(() => {
@@ -135,6 +140,8 @@ const ChatInterface = ({
     };
     if (message) {
       try {
+        playSendMessageSound();
+
         setMessage("");
         await set(newMessageRef, newMessage);
       } catch (error) {

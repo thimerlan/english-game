@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { auth, dbChat } from "../../firebaseConfig";
 import { ref, onChildAdded } from "firebase/database";
+import useAudio from "../../hooks/useAudio/useAudio";
 
 import "./Chat.scss";
 
@@ -12,14 +13,18 @@ const ChatList = ({ chatRoomId }: ChatListProps) => {
   const [messages, setMessages] = useState<Messages[]>([]);
   const chatListRef = useRef<HTMLDivElement>(null);
 
+  const { play: playReceiveMessageSound } = useAudio("/havingMessageSound.mp3");
+
   useEffect(() => {
     const messagesRef = ref(dbChat, `chatRooms/${chatRoomId}`);
 
     const unsubscribe = onChildAdded(messagesRef, (snapshot) => {
       const newMessage = snapshot.val();
 
-      if (chatRoomId.length)
+      if (chatRoomId.length) {
+        playReceiveMessageSound();
         setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
     });
 
     return () => {
