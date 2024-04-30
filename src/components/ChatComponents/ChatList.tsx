@@ -15,6 +15,8 @@ const ChatList = ({ chatRoomId }: ChatListProps) => {
 
   const { play: playReceiveMessageSound } = useAudio("/havingMessageSound.mp3");
 
+  const userUID = auth.currentUser?.uid;
+
   useEffect(() => {
     const messagesRef = ref(dbChat, `chatRooms/${chatRoomId}`);
 
@@ -22,7 +24,9 @@ const ChatList = ({ chatRoomId }: ChatListProps) => {
       const newMessage = snapshot.val();
 
       if (chatRoomId.length) {
-        playReceiveMessageSound();
+        if (newMessage.uid !== userUID) {
+          playReceiveMessageSound();
+        }
         setMessages((prevMessages) => [...prevMessages, newMessage]);
       }
     });
