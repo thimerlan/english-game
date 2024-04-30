@@ -52,6 +52,15 @@
     background-color: transparent;
     font-size: 25px;
     color: #0abeff;
+    width: 27px;
+    height: 29px;
+    outline: 3px double #287ffa00;
+    border-radius: 0.5ex;
+    padding: 3px 3px 3px 2px;
+    &:focus {
+      outline: 3px double #06c9ff;
+      border-radius: 0.5ex;
+    }
     &:disabled {
       color: #817a7a;
       cursor: no-drop;
