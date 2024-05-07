@@ -1,5 +1,23 @@
-h2 {
-  padding-top: 10px;
+.welcome-message {
   text-align: center;
-  color: aliceblue;
+  max-width: 600px;
+  background-color: #f2710d;
+  border-radius: 1ex;
+  margin: 15px auto;
+  h2 {
+    color: aliceblue;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    padding: 5px;
+    .highlight-text {
+      background-color: #0d8bf2;
+      color: antiquewhite;
+      border-radius: 1ex;
+    }
+  }
 }
