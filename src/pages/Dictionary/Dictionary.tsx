@@ -33,6 +33,7 @@ const Dictionary = () => {
     null
   );
   const [errorMessage, setErrorMessage] = useState<typeErrorMessage | null>();
+  const [audioError, setAudioError] = useState<string | null>(null);
   const dictionaryContainerRef = useRef<HTMLDivElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const [rerunSearch, setRerunSearch] = useState(false);
@@ -53,6 +54,7 @@ const Dictionary = () => {
 
         setdictionaryData(response.data[0]);
         setErrorMessage(null);
+        setAudioError(null);
       } catch (error: any) {
         setdictionaryData(null);
         setErrorMessage(error.response.data);
@@ -61,7 +63,40 @@ const Dictionary = () => {
   };
 
   const playAudio = (audioSrc: string) => {
+    const synth = window.speechSynthesis;
+
+    const textToSpeak = dictionaryData?.word;
+    const lang = "en-US";
+
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+    utterance.lang = lang;
+
+    utterance.pitch = 1;
+    utterance.rate = 1;
+
     const audio = new Audio(audioSrc);
+
+    const audioTimeout = setTimeout(() => {
+      if (!synth.speaking) {
+        synth.speak(utterance);
+      }
+
+      setAudioError(
+        "Now it's being pronounced by Google's speech synthesis service because the server is currently unavailable!"
+      );
+    }, 3000);
+
+    const onPlaying = () => {
+      clearTimeout(audioTimeout);
+    };
+
+    const onError = () => {
+      console.error("Error playing audio");
+    };
+
+    audio.addEventListener("playing", onPlaying);
+    audio.addEventListener("error", onError);
+
     audio.play();
   };
 
@@ -274,6 +309,7 @@ const Dictionary = () => {
                   </li>
                 ))}
               </ul>
+              {<b>{audioError}</b>}
             </div>
             {dictionaryData.meanings && (
               <div className="meanings">
