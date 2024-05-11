@@ -337,14 +337,14 @@ const ChatPage = () => {
           callRequest.recipient === userUID &&
           callRequest.status === "pending"
         ) {
-          playReceiveCallSound();
-
           setPendingCallRequests((prevPendingCallRequests) => {
             const exists = prevPendingCallRequests.some(
               (pendingCall) => pendingCall.key === callRequestKey
             );
 
             if (!exists) {
+              playReceiveCallSound();
+
               const newPendingCall = {
                 senderName: callRequest.senderName,
                 senderPhoto: callRequest.senderPhoto,
