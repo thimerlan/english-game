@@ -574,6 +574,7 @@ $breakpoints: (
     font-size: 28px;
     color: #fff;
     letter-spacing: 1px;
+    text-align: center;
   }
   p {
     font-size: 26px;
@@ -582,34 +583,60 @@ $breakpoints: (
     margin: 10px 0px;
     text-align: center;
   }
-  .emoji-options {
-    width: 10%;
+  .feedback-options {
+    width: auto;
     display: flex;
     justify-content: space-between;
     margin: 25px 0px;
-    @media (max-width: 488px) {
-      width: 25%;
-    }
-    button {
+
+    .feedback-option-like,
+    .feedback-option-dislike {
       font-size: 24px;
       background-color: #154df6e0;
       border-radius: 2ex;
-      padding: 5px;
-      margin-right: 5px;
+      padding: 12px;
+      margin-right: 25px;
       @media (hover: hover) {
         &:hover {
-          background-color: #c8c7c7;
+          background-color: #dbae26;
           transform: scale(1.1);
         }
+      }
+      b {
+        font-size: 12px;
+        color: #fff;
       }
       &.isActive {
         background-color: #de6e06;
         transform: scale(1.2);
       }
     }
+    button {
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
   }
-  .submit-feedback,
-  button {
+  .submit-feedback {
+    background-color: #00ff48;
+    color: #ffffff;
+    padding: 6px;
+    border-radius: 1ex;
+    font-size: 20px;
+    font-weight: 600;
+    transition: 0.2s all ease;
+    width: 200px;
+    height: 40px;
+    &:hover {
+      box-shadow: 3px 4px 5px yellow;
+    }
+    &:disabled {
+      background-color: #05c83c;
+      cursor: no-drop;
+      box-shadow: 3px 4px 5px rgba(255, 255, 0, 0);
+    }
+  }
+  .skipFeedback-btn {
     background-color: #ff2f00;
     color: #f8f9ff;
     padding: 6px;

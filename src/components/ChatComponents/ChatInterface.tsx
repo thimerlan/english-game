@@ -263,8 +263,6 @@ const ChatInterface = ({
         setShowFeedbackComponent(!showFeedbackComponent);
 
         console.log(`Feedback (${feedbackType}) submitted successfully.`);
-      } else if (userProfileData && feedbackType === "") {
-        alert("Please select feedback!");
       } else {
         console.error("User profile not found.");
       }
@@ -277,26 +275,39 @@ const ChatInterface = ({
     <div className="chat-interface">
       {showFeedbackComponent && (
         <div className="feedback-container">
-          <h3>Select Feedback:</h3>
-          <div className="emoji-options">
+          <h3>Did you like talking to this user:</h3>
+          <div className="feedback-options">
             <button
-              className={feedbackType === "like" ? "isActive" : ""}
+              className={`feedback-option-like ${
+                feedbackType === "like" ? "isActive" : ""
+              }`}
               onClick={() => setFeedbackType("like")}
             >
-              👍
+              👍 <b>(Yes, I did)</b>
             </button>
             <button
-              className={feedbackType === "dislike" ? "isActive" : ""}
+              className={`feedback-option-dislike ${
+                feedbackType === "dislike" ? "isActive" : ""
+              }`}
               onClick={() => setFeedbackType("dislike")}
             >
-              👎
+              👎 <b>(No, I didn't)</b>
             </button>
           </div>
-          <button className="submit-feedback" onClick={handleGiveFeedback}>
-            Give
+          <button
+            disabled={!feedbackType}
+            className="submit-feedback"
+            onClick={handleGiveFeedback}
+          >
+            Submit Feedback
           </button>
           <p>Or You can leave without giving feedback:</p>
-          <button onClick={() => setChatRoomId("")}>Leave</button>
+          <button
+            className="skipFeedback-btn"
+            onClick={() => setChatRoomId("")}
+          >
+            Leave
+          </button>
         </div>
       )}
       {chattingUserInfo && (
