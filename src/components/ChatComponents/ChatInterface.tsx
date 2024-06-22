@@ -425,6 +425,9 @@ const ChatInterface = ({
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             setMessage(e.target.value)
           }
+          style={{
+            height: `${37 + message.length}px`,
+          }}
           placeholder="Type your message..."
         />
         <button disabled={message.trim().length ? false : true} type="submit">
