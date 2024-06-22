@@ -47,6 +47,7 @@ const ChatInterface = ({
   const [message, setMessage] = useState("");
   const [showEmojis, setShowEmojis] = useState(false);
   const [feedbackType, setFeedbackType] = useState("");
+  const [feedbackComment, setFeedbackComment] = useState("");
   const [showFeedbackComponent, setShowFeedbackComponent] = useState(false);
   const [chattingUserInfo, setChattingUserInfo] = useState<IChattingUserInfo>();
   const { emojis, loadingEmojis } = useEmojiAPI();
@@ -214,12 +215,13 @@ const ChatInterface = ({
             callRequest.status === "rejected") ||
           (callRequest.sender === userUID && callRequest.status === "rejected")
         ) {
+          let isSender = callRequest.sender === userUID;
+
           setChattingUserInfo({
-            uid: `${
-              (callRequest.recipient !== userUID && callRequest.recipient) ||
-              (callRequest.sender !== userUID && callRequest.sender)
-            }`,
-            username: senderUserInfo.username || recipientUserInfo.username,
+            userId: isSender ? callRequest.recipient : callRequest.sender,
+            userName: isSender
+              ? recipientUserInfo.username
+              : senderUserInfo.username,
           });
         }
       }
@@ -240,25 +242,55 @@ const ChatInterface = ({
     textareaRef.current?.focus();
   };
   const handleGiveFeedback = async (): Promise<void> => {
-    const userProfileRef = ref(dbChat, `userProfiles/${chattingUserInfo?.uid}`);
+    const chattingUserProfileRef = ref(
+      dbChat,
+      `userProfiles/${chattingUserInfo?.userId}`
+    );
+    const currentUserProfileRef = ref(dbChat, `userProfiles/${userUID}`);
+
+    const newFeedbackRef = push(
+      ref(dbChat, `userProfiles/${chattingUserInfo?.userId}/detailedFeedback`)
+    );
 
     try {
-      const userProfileSnapshot = await get(userProfileRef);
-      const userProfileData = userProfileSnapshot.val();
+      const [chattingUserProfileSnapshot, currentUserProfileSnapshot] =
+        await Promise.all([
+          get(chattingUserProfileRef),
+          get(currentUserProfileRef),
+        ]);
 
-      if (userProfileData && feedbackType) {
-        const feedbackCount = userProfileData.feedback[feedbackType + "s"] || 0;
+      const chattingUserProfileData = chattingUserProfileSnapshot.val();
+      const currentUserProfileData = currentUserProfileSnapshot.val();
+
+      if (chattingUserProfileData && currentUserProfileData) {
+        const feedbackCount =
+          chattingUserProfileData.feedback[feedbackType + "s"] || 0;
 
         const updatedFeedback = {
-          ...userProfileData.feedback,
+          ...chattingUserProfileData.feedback,
           [feedbackType + "s"]: feedbackCount + 1,
         };
 
-        await update(userProfileRef, {
+        await update(chattingUserProfileRef, {
           feedback: updatedFeedback,
         });
 
+        if (chattingUserInfo) {
+          const { uid, displayName, photo } = currentUserProfileData;
+
+          let newDetailedFeedback = {
+            userId: uid,
+            userName: displayName,
+            userPhoto: photo,
+            feedbackType,
+            comment: feedbackComment,
+          };
+
+          await set(newFeedbackRef, newDetailedFeedback);
+        }
+
         setFeedbackType("");
+        setFeedbackComment("");
         setChatRoomId("");
         setShowFeedbackComponent(!showFeedbackComponent);
 
@@ -294,6 +326,31 @@ const ChatInterface = ({
               👎 <b>(No, I didn't)</b>
             </button>
           </div>
+          <textarea
+            className="feedback-comment"
+            placeholder="Additional comments (optional)"
+            maxLength={250}
+            value={feedbackComment}
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+              setFeedbackComment(e.target.value)
+            }
+          />
+          <div className="feedback-length-counter">
+            <span
+              className={
+                feedbackComment.length === 250
+                  ? "counter-red"
+                  : "counter-normal"
+              }
+            >
+              {250 - feedbackComment.length}
+            </span>
+
+            {feedbackComment.length === 250 && (
+              <b className="max-char-warning">Max characters reached</b>
+            )}
+          </div>
+
           <button
             disabled={!feedbackType}
             className="submit-feedback"
@@ -313,7 +370,7 @@ const ChatInterface = ({
       {chattingUserInfo && (
         <div className="quited-user">
           <p>
-            <span>{chattingUserInfo.username} </span>
+            <span>{chattingUserInfo.userName} </span>
             has left this chat. You can also leave this chat by clicking the
             button below:
             <button

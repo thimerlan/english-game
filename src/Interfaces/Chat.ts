@@ -3,10 +3,19 @@ interface Messages {
   id: string;
   message: string;
 }
-interface feedback {
+interface IFeedbackDetail {
+  userId: string;
+  userName: string;
+  userPhoto: string;
+  feedbackType: string;
+  comment?: string;
+}
+
+interface IFeedback {
   likes: number;
   dislikes: number;
 }
+
 interface IUserProfiles {
   displayName: string;
   age: string;
@@ -15,11 +24,12 @@ interface IUserProfiles {
   photo: string;
   uid: string;
   status: string;
-  feedback: feedback;
+  feedback: IFeedback;
+  detailedFeedback?: { [key: string]: IFeedbackDetail };
 }
 interface IChattingUserInfo {
-  uid: string;
-  username: string;
+  userId: string;
+  userName: string;
 }
 interface IUserInfo {
   username: string;

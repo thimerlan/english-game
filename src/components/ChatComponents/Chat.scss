@@ -617,6 +617,64 @@ $breakpoints: (
       }
     }
   }
+  .feedback-comment {
+    font-family: "Poppins";
+    font-size: 17px;
+    font-weight: 600;
+    width: 400px;
+    height: 205px;
+    @media (max-width: 425px) {
+      width: 340px;
+      height: 165px;
+    }
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 1ex;
+    resize: none;
+    outline: none;
+    transition: 0.3s all ease-in;
+    color: #02bbff;
+    background-color: #eaedef;
+    margin-bottom: 20px;
+    &:focus {
+      box-shadow: 2px 2px 3px 1px rgb(255, 247, 0);
+    }
+    &::placeholder {
+      font-size: 16px;
+      color: #f5940be0;
+    }
+  }
+  .feedback-length-counter {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    width: 350px;
+    text-align: right;
+    span,
+    b {
+      padding: 3px;
+      border-radius: 1ex;
+    }
+
+    .counter-normal {
+      color: white;
+      background-color: #00ff48;
+    }
+
+    .counter-red {
+      color: red;
+      background-color: #2b362e;
+    }
+
+    .max-char-warning {
+      margin-left: 10px;
+      color: red;
+      padding: 3px;
+      background-color: #2b362e;
+      border-radius: 1ex;
+    }
+  }
   .submit-feedback {
     background-color: #00ff48;
     color: #ffffff;

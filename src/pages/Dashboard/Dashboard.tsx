@@ -1,6 +1,3 @@
-// import useCoins from "../../hooks/useCoins/useCoins";
-// import coin from "../../assets/coin.svg";
-//   const { coins } = useCoins();
 import { ChangeEvent, useEffect, useState } from "react";
 import { auth, dbChat } from "../../firebaseConfig";
 import { get, ref, update } from "firebase/database";
@@ -19,16 +16,6 @@ import {
 import NavBar from "../../components/NavBar/NavBar";
 import "./Dashboard.scss";
 
-interface IUserProfile {
-  displayName: string;
-  age: string;
-  gender: TypeGender;
-  englishLevel: "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "";
-  photo: string;
-  uid: string;
-  status: string;
-  feedback: feedback;
-}
 interface IUserProfileData {
   userName: string;
   userAge: string;
@@ -42,7 +29,7 @@ interface IUserProfileDataErros
 type TypeGender = "female" | "male" | "";
 
 const Dashboard = () => {
-  const [userProfile, setUserProfile] = useState<IUserProfile>();
+  const [userProfile, setUserProfile] = useState<IUserProfiles>();
 
   const [userProfileLoading, setUserProfileLoading] = useState(true);
   const [userProfileData, setUserProfileData] = useState<IUserProfileData>({
@@ -240,6 +227,10 @@ const Dashboard = () => {
       return true;
     }
   };
+
+  const detailedFeedbacks: { [key: string]: IFeedbackDetail } =
+    userProfile?.detailedFeedback || {};
+  const detailedFeedbackKeys: string[] = Object.keys(detailedFeedbacks);
 
   return (
     <>
@@ -478,15 +469,61 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="feedbacks-container">
-                    <h3>Your Feedbacks:</h3>
-                    <p>
-                      Likes: 👍
-                      <span>{userProfile.feedback.likes || 0}</span>
-                    </p>
-                    <p>
-                      Dislikes: 👎
-                      <span>{userProfile.feedback.dislikes || 0}</span>
-                    </p>
+                    <h3>Overall Feedbacks:</h3>
+                    <div className="overall-feedbacksInNumber">
+                      <p>
+                        Likes: 👍
+                        <span>{userProfile.feedback.likes || 0}</span>
+                      </p>
+                      <p>
+                        Dislikes: 👎
+                        <span>{userProfile.feedback.dislikes || 0}</span>
+                      </p>
+                    </div>
+                    <br />
+                    <h3>Detailed feedbacks:</h3>
+                    <div className="detailed-feedbacks">
+                      <ul>
+                        {userProfile.detailedFeedback ? (
+                          detailedFeedbackKeys.reverse().map((key: string) => {
+                            const user = detailedFeedbacks[key];
+
+                            return (
+                              <li
+                                key={key}
+                                className={
+                                  user.feedbackType === "like"
+                                    ? "green-shadow-ef"
+                                    : "red-shadow-ef"
+                                }
+                              >
+                                <div className="userPhoto-container">
+                                  <div className="userPhoto-container-main">
+                                    <img
+                                      src={user.userPhoto}
+                                      alt="user photo"
+                                    />
+                                  </div>
+                                </div>
+                                <h4>{user.userName}</h4>
+                                <b
+                                  className={
+                                    user.feedbackType === "like"
+                                      ? "green-like "
+                                      : "red-dislike"
+                                  }
+                                >
+                                  {user.feedbackType === "like" ? "👍🏻" : "👎🏻"}
+                                </b>
+                                <p>{user.comment}</p>
+                              </li>
+                            );
+                          })
+                        ) : (
+                          <h3>Sorry, you don't have feedback yet.</h3>
+                        )}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               ) : (
