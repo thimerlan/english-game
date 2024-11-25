@@ -501,7 +501,11 @@ const ChatPage = () => {
       });
     }
   };
-
+  useEffect(() => {
+    if (filterUsersByLevel.from && filterUsersByLevel.to) {
+      setShowModalFilterUserByLevel(!showModalFilterUserByLevel);
+    }
+  }, [filterUsersByLevel.to]);
   const isChatRoomEmpty = () => chatRoomId.length === 0;
 
   if (auth.currentUser) {
@@ -523,12 +527,12 @@ const ChatPage = () => {
 
         {isChatRoomEmpty() && (
           <div className="chatPage-info">
-            <h1>Welcome to the Chat Page! 😊</h1>
+            <h1>Welcome to the Chat Zone! 🎉</h1>
             <p>
-              This is your space to connect, chat, and share with friends and
-              fellow chat enthusiasts. Feel free to start a conversation, send
-              messages, and even use emojis to express yourself. Have a great
-              time chatting!
+              Dive into a lively space where you can connect, share, and chat
+              with friends and fellow enthusiasts. Feel free to jump into
+              conversations, send messages, and add a splash of personality with
+              emojis. Enjoy your time here and make every chat memorable!
             </p>
           </div>
         )}
@@ -551,10 +555,10 @@ const ChatPage = () => {
               >
                 <div className="beReadyToChat-content">
                   <p className="info-ReadyToChatFeature">
-                    Now you are available for chat. Others can send you chat
-                    requests, and the first request you get will start the
-                    conversation. It's a quick and easy way to connect with
-                    fellow users.
+                    You are now instantly available for chat. As soon as you
+                    receive the first chat request, the conversation will start
+                    automatically, connecting you right away without any need to
+                    accept or deny. Enjoy seamless chats with fellow users!
                   </p>
                   <div className="searching-ui">
                     <div className="searching-ui-loading">
@@ -667,10 +671,9 @@ const ChatPage = () => {
                     </button>
                     <p className="howdoesitwork">
                       <b>
-                        To filter users by level, select two level and close the
-                        modal.
+                        To filter users by level, select two levels.
                         <br />
-                        The results will be displayed properly.
+                        The results will be displayed accordingly.
                       </b>
                     </p>
 
